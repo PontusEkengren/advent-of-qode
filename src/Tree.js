@@ -1,11 +1,14 @@
 import React from 'react';
+import { Link } from './Styled/defaults';
 import { Branch } from './Styled/christmas.js';
 import { treeData } from './treeData.js';
 
 const getBranchContent = (branch) => {
   return (
     <tr>
-      <td>{branch.ornament}</td>
+      <td>
+        <Link href='http://google.se'>{branch.ornament}</Link>
+      </td>
       <td>{branch.day > 0 ? branch.day : ''}</td>
     </tr>
   );

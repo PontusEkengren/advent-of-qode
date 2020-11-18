@@ -15,6 +15,22 @@ export const Header = styled.header`
   margin-left: 20px;
 `;
 
+export const Link = styled.a`
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  &:hover {
+    background-color: #1e1e46;
+    background-color: rgba(119, 119, 165, 0.2);
+    cursor: pointer;
+  }
+  &:visited {
+    text-decoration: none;
+    color: inherit;
+  }
+`;
+
 // export const colours = {
 //   red: '#e60000',
 //   green: '#009900',
