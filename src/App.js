@@ -1,12 +1,17 @@
 import './App.css';
+import { Header, Body } from './Styled/defaults';
+import Tree from './Tree.js';
 
 function App() {
   return (
-    <div className='App'>
-      <header className='App-header'>
+    <>
+      <Header>
         <p>Advent of Qode</p>
-      </header>
-    </div>
+      </Header>
+      <Body>
+        <Tree />
+      </Body>
+    </>
   );
 }
 
