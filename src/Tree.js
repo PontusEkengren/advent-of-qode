@@ -21,7 +21,7 @@ const getTreeData = () => {
 const getBranchContent = (branch) => {
   return (
     <tr>
-      <td>{branch.active ? <Link href='http://google.se'>{branch.ornament}</Link> : branch.ornament}</td>
+      <td>{branch.active && branch.day > 0 ? <Link href='http://google.se'>{branch.ornament}</Link> : branch.ornament}</td>
       <td>{branch.day > 0 ? branch.day : ''}</td>
     </tr>
   );

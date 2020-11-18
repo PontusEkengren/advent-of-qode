@@ -30,33 +30,3 @@ export const Link = styled.a`
     color: inherit;
   }
 `;
-
-// export const colours = {
-//   red: '#e60000',
-//   green: '#009900',
-//   black: '#000000',
-//   null: '#000000',
-//   grey: '#808080',
-// };
-
-// export const Button = styled.button`
-//   margin-top: 1px;
-
-//   white-space: nowrap;
-//   position: relative;
-//   height: 30px;
-//   border-radius: 3px;
-//   padding: '5px 20px';
-//   font-size: '11px';
-//   text-transform: uppercase;
-//   background-color: white;
-//   border: 1px solid DarkSlateGray;
-//   color: DarkGreen;
-//   cursor: pointer;
-
-//   &:hover {
-//     background-color: DarkGreen;
-//     border: 1px solid DarkGreen;
-//     color: white;
-//   }
-// `;
