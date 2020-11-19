@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Colours, Row } from './Styled/defaults';
 import { Branch, Ornament } from './Styled/christmas.js';
 import { treeData } from './treeData.js';
 import Question from './Question';
 
-export default function Tree() {
+export default function Tree({ userData }) {
   const [showQuestion, setShowQuestion] = useState(false);
   const [day, setDay] = useState(null);
+  const [tree, setTree] = useState([]);
 
-  const getTreeData = () => {
+  const getTreeData = (userData) => {
     const date = new Date().toISOString();
     let month = date.slice(5, 7);
     if (month === '11') {
@@ -16,12 +17,17 @@ export default function Tree() {
       const day = parseInt(dayString);
 
       return treeData.map((branch) => {
-        return { ...branch, active: branch.day <= day };
+        return { ...branch, active: branch.day <= day, completed: userData.some((x) => x.question === branch.day) };
       });
     }
 
     return treeData;
   };
+
+  useEffect(() => {
+    console.log('userData', userData);
+    setTree(getTreeData(userData));
+  }, [userData]);
 
   const isActive = (branch) => {
     return branch.active && branch.day > 0;
@@ -42,7 +48,7 @@ export default function Tree() {
           {[...branch.ornament].map((char, i) => {
             var color = branch.active ? Colours.lightGrey : Colours.grey;
             // const color = Colours.lightGrey;
-            if (branch.active) {
+            if (branch.active && branch.completed) {
               switch (char) {
                 case 'o':
                   color = Colours.orange;
@@ -79,13 +85,14 @@ export default function Tree() {
 
   return (
     <div style={{ width: '950px', margin: '20px 0 0 40px' }}>
-      {getTreeData().map((branch, i) => (
-        <Branch active={branch.active} key={i}>
-          <table>
-            <tbody>{getBranchContent(branch)}</tbody>
-          </table>
-        </Branch>
-      ))}
+      {tree.length > 0 &&
+        tree.map((branch, i) => (
+          <Branch active={branch.active} key={i}>
+            <table>
+              <tbody>{getBranchContent(branch)}</tbody>
+            </table>
+          </Branch>
+        ))}
 
       <Question onCloseModal={() => setShowQuestion(false)} modalStatus={showQuestion} day={day} />
     </div>
