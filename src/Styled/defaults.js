@@ -101,3 +101,7 @@ export const Image = styled.img`
   width: 42px;
   height: 42px;
 `;
+
+export const TimerContainer = styled.h2`
+  color: ${Colours.green};
+`;
