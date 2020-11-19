@@ -6,7 +6,6 @@ export const getLeaderBoard = () => {
 };
 
 export const getUserScore = (userId) => {
-  userId = 0; //TODO change
   return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/advent/user?userId=${userId}`);
 };
 

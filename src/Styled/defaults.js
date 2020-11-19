@@ -79,3 +79,16 @@ export const ContainerCenterColumn = styled.div`
   outline: none;
   ${(props) => props.height && `height: ${props.height}px`};
 `;
+
+export const ContainerCenter = styled.div`
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  width: 160px;
+`;
+
+export const Image = styled.img`
+  margin-right: 12px;
+  width: 42px;
+  height: 42px;
+`;
