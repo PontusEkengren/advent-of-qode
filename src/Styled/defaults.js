@@ -72,10 +72,19 @@ export const Button = styled.button`
 `;
 
 export const ContainerCenterColumn = styled.div`
+  margin: 25px 35px 0 150px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   flex-direction: column;
+  outline: none;
+  minwidth: '930px';
+  ${(props) => props.height && `height: ${props.height}px`};
+`;
+
+export const FlexContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   outline: none;
   ${(props) => props.height && `height: ${props.height}px`};
 `;

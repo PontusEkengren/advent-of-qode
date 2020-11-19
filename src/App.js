@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import { Header, Body, ContainerCenterColumn } from './Styled/defaults';
+import { Header, Body, ContainerCenterColumn, FlexContainer } from './Styled/defaults';
 import { Title } from './Styled/christmas';
 import LeaderBoard from './LeaderBoard';
 import Tree from './Tree.js';
@@ -54,20 +54,21 @@ function App() {
         {!name && <span>Login with google to play</span>}
       </Header>
       <Body>
-        <Tree userData={userScore} disabled={!isLogined} />
-
-        <ContainerCenterColumn>
-          <GoogleAuth
-            imageUrl={imageUrl}
-            isLogined={isLogined}
-            clientId={REACT_APP_CLIENT_ID}
-            handleSuccess={login}
-            onLogoutSuccess={logout}
-            onLogOutFailure={handleLogoutFailure}
-            onLogInFailure={handleLoginFailure}
-          />
-          <LeaderBoard />
-        </ContainerCenterColumn>
+        <FlexContainer>
+          <Tree userData={userScore} disabled={!isLogined} />
+          <ContainerCenterColumn>
+            <GoogleAuth
+              imageUrl={imageUrl}
+              isLogined={isLogined}
+              clientId={REACT_APP_CLIENT_ID}
+              handleSuccess={login}
+              onLogoutSuccess={logout}
+              onLogOutFailure={handleLogoutFailure}
+              onLogInFailure={handleLoginFailure}
+            />
+            <LeaderBoard />
+          </ContainerCenterColumn>
+        </FlexContainer>
       </Body>
     </>
   );

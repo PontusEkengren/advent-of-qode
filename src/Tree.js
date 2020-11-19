@@ -86,7 +86,7 @@ export default function Tree({ userData, disabled }) {
   };
 
   return (
-    <div style={{ width: '950px', margin: '20px 0 0 40px' }}>
+    <div style={{ width: '950px', margin: '20px 0 0 40px', minWidth: '930px' }}>
       {tree.length > 0 &&
         tree.map((branch, i) => (
           <Branch active={branch.active} key={i}>

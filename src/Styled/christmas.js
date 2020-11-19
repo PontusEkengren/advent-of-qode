@@ -12,5 +12,9 @@ export const Ornament = styled.span`
   text-shadow: ${(props) => (props.textShadow ? '0 0 5px' : '')};
 `;
 export const Title = styled.span`
+  margin-left: 20px;
+  font-size: 25px;
+  text-shadow: 0 0 5px;
+
   color: ${(props) => (props.color ? props.color : Colours.green)};
 `;
