@@ -45,8 +45,14 @@ export const Input = styled.input`
   font-size: inherit;
 `;
 
+export const Group = styled.div`
+  margin-top: 20px;
+  display: inherit;
+  flex-direction: inherit;
+`;
+
 export const Button = styled.button`
-  margin-top: 15px;
+  margin-top: 1px;
   height: 35px;
   border-radius: 3px;
   font-family: inherit;
@@ -69,33 +75,3 @@ export const ContainerCenterColumn = styled.div`
   outline: none;
   ${(props) => props.height && `height: ${props.height}px`};
 `;
-
-// export const ContainerSpaceBetween = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   width: 160px;
-// `;
-
-// export const ContainerCenter = styled.div`
-//   margin-top: 25px;
-//   display: flex;
-//   justify-content: center;
-//   width: 160px;
-// `;
-
-// export const A = styled(Link)`
-//   display: inline-block;
-//   position: relative;
-//   text-decoration: none;
-//   color: inherit;
-//   &:hover {
-//     background-color: #1e1e46;
-//     background-color: rgba(119, 119, 165, 0.2);
-//     cursor: pointer;
-//   }
-//   &:visited {
-//     text-decoration: none;
-//     color: inherit;
-//   }
-// `;

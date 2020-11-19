@@ -47,7 +47,7 @@ export default function Tree() {
         </Branch>
       ))}
 
-      <Question handleCloseModal={() => setShowQuestion(false)} modalStatus={showQuestion} day={day} />
+      <Question onCloseModal={() => setShowQuestion(false)} modalStatus={showQuestion} day={day} />
     </div>
   );
 }
