@@ -4,7 +4,7 @@ import { Branch, Ornament } from './Styled/christmas.js';
 import { treeData } from './treeData.js';
 import Question from './Question';
 
-export default function Tree({ userData, disabled }) {
+export default function Tree({ userData, disabled, onSubmit }) {
   const [showQuestion, setShowQuestion] = useState(false);
   const [day, setDay] = useState(null);
   const [tree, setTree] = useState([]);
@@ -90,6 +90,10 @@ export default function Tree({ userData, disabled }) {
     setDay(null);
   };
 
+  const handleSubmit = (time) => {
+    onSubmit(time, day);
+  };
+
   return (
     <div style={{ width: '950px', margin: '20px 0 0 40px', minWidth: '930px' }}>
       {tree.length > 0 &&
@@ -101,7 +105,7 @@ export default function Tree({ userData, disabled }) {
           </Branch>
         ))}
 
-      <Question onCloseModal={handleCloseModal} modalStatus={showQuestion} day={day} />
+      <Question onCloseModal={handleCloseModal} modalStatus={showQuestion} day={day} onSubmitResult={handleSubmit} />
     </div>
   );
 }

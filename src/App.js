@@ -12,8 +12,9 @@ const { REACT_APP_CLIENT_ID } = process.env;
 function App() {
   const [userScore, setUserScore] = useState([]);
   const [isLogined, setIsLogined] = storage.useLocalStorage('isLogined', false);
-  const [accessToken, setAccessToken] = useState('');
+  const [accessToken, setAccessToken] = storage.useLocalStorage('googleId', '');
   const [name, setName] = storage.useLocalStorage('name', '');
+  const [email, setEmail] = storage.useLocalStorage('email', '');
   const [imageUrl, setImageUrl] = storage.useLocalStorage('imageUrl', undefined);
 
   useEffect(() => {
@@ -24,9 +25,11 @@ function App() {
 
   const login = (response) => {
     if (response.accessToken) {
+      console.log('profile', response.profileObj);
       setIsLogined(true);
-      setAccessToken(response.accessToken);
+      setAccessToken(response.profileObj.googleId);
       setName(response.profileObj.name);
+      setEmail(response.profileObj.email);
       setImageUrl(response.profileObj.imageUrl);
     }
   };
@@ -46,6 +49,36 @@ function App() {
     alert('Failed to log out');
   };
 
+  const handleSubmit = (time, day) => {
+    console.log('test time: ', time);
+
+    // {
+    //   public string UserId { get; set; }
+    //   public int Score { get; set; }
+    //   public string Email { get; set; }
+    //   public int Question { get; set; }
+
+    const data = {
+      userId: accessToken,
+      score: time,
+      email: email,
+      question: day,
+    };
+
+    api
+      .createUserScore(data)
+      .then((response) => {
+        // setQuestionOfTheDay(response.data.question);
+        // setReady(true);
+        // start();
+        console.log('Submit Success', response);
+      })
+      .catch((e) => {
+        console.log('error', e);
+        // setQuestionOfTheDay('Unable to fetch data from database');
+      });
+  };
+
   return (
     <>
       <Header>
@@ -55,7 +88,7 @@ function App() {
       </Header>
       <Body>
         <FlexContainer>
-          <Tree userData={userScore} disabled={!isLogined} />
+          <Tree userData={userScore} disabled={!isLogined} onSubmit={handleSubmit} />
           <ContainerCenterColumn>
             <GoogleAuth
               imageUrl={imageUrl}

@@ -13,10 +13,20 @@ export const getQuery = (day) => {
   return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/query?day=${day}`);
 };
 
-export const submitAnswer = (day, answer) => {
+// public string UserId { get; set; }
+// public int Score { get; set; }
+// public string Email { get; set; }
+// public int Question { get; set; }
+
+export const createUserScore = (data) => {
   return axios.post(
-    `${REACT_APP_ADVENT_OF_QODE_SERVER}/query/answer`,
-    { answer, day },
+    `${REACT_APP_ADVENT_OF_QODE_SERVER}/advent`,
+    {
+      userId: data.userId,
+      score: data.score,
+      email: data.email,
+      question: data.question,
+    },
     {
       headers: {
         'Content-Type': 'application/json',
@@ -25,10 +35,10 @@ export const submitAnswer = (day, answer) => {
   );
 };
 
-export const saveScore = (data) => {
+export const submitAnswer = (day, answer) => {
   return axios.post(
-    `${REACT_APP_ADVENT_OF_QODE_SERVER}/advent`,
-    { data },
+    `${REACT_APP_ADVENT_OF_QODE_SERVER}/query/answer`,
+    { answer, day },
     {
       headers: {
         'Content-Type': 'application/json',

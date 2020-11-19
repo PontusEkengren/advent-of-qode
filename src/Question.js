@@ -4,7 +4,7 @@ import { Colours, Button, Group, Input, TimerContainer, ContainerCenterColumn, F
 import * as api from './api.js';
 import Timer from 'react-compound-timer';
 
-export default function Question({ modalStatus, day, onCloseModal }) {
+export default function Question({ modalStatus, day, onCloseModal, onSubmitResult }) {
   const [modalIsOpen, setIsOpen] = useState(modalStatus);
   const [input, setInput] = useState('');
   const [questionOfTheDay, setQuestionOfTheDay] = useState('');
@@ -16,14 +16,6 @@ export default function Question({ modalStatus, day, onCloseModal }) {
   useEffect(() => {
     setIsOpen(modalStatus);
   }, [modalStatus]);
-
-  const afterOpenModal = () => {
-    // if (day) {
-    //   api.getQuery(day).then((response) => {
-    //     setQuestionOfTheDay(response.data);
-    //   });
-    // }
-  };
 
   const handleReady = (start) => {
     api
@@ -44,10 +36,11 @@ export default function Question({ modalStatus, day, onCloseModal }) {
       color: Colours.lightGrey,
     },
   };
+  const afterOpenModal = () => {};
 
-  const handleKeyDown = (e, stop) => {
+  const handleKeyDown = (e, stop, getTime) => {
     if (e.keyCode === 13) {
-      handleSubmit(stop);
+      handleSubmit(stop, getTime);
     }
   };
 
@@ -56,9 +49,11 @@ export default function Question({ modalStatus, day, onCloseModal }) {
     return incorrectAnswer ? Colours.red : Colours.lightGrey;
   };
 
-  const handleSubmit = (stop) => {
-    //Sumbit answer
+  const handleSubmit = (stop, getTime) => {
+    const roundedTime = Math.round(Math.floor(getTime()) / 1000);
+    console.log('getTime', roundedTime);
     if (ready && input) {
+      //Sumbit answer
       api
         .submitAnswer(day, input)
         .then((response) => {
@@ -67,6 +62,7 @@ export default function Question({ modalStatus, day, onCloseModal }) {
             SetCorrectAnswer(true);
             setQuestionOfTheDay('You found the right answer!');
             //Submit result
+            onSubmitResult(roundedTime);
           } else {
             SetIncorrectAnswer(true);
             setTimeout(() => SetIncorrectAnswer(false), 750);
@@ -91,6 +87,7 @@ export default function Question({ modalStatus, day, onCloseModal }) {
       <Modal isOpen={modalIsOpen} ariaHideApp={false} onAfterOpen={afterOpenModal} onRequestClose={handleCloseModal} style={customStyles} contentLabel='Example Modal'>
         <Timer
           startImmediately={false}
+          timeToUpdate={15}
           checkpoints={[
             {
               time: 60000,
@@ -101,7 +98,7 @@ export default function Question({ modalStatus, day, onCloseModal }) {
             },
           ]}
         >
-          {({ start, resume, pause, stop, reset, timerState }) => (
+          {({ start, stop, getTime }) => (
             <ContainerCenterColumn>
               <div>
                 <TimerContainer>
@@ -117,7 +114,7 @@ export default function Question({ modalStatus, day, onCloseModal }) {
                   <Input
                     color={getColor()}
                     onKeyDown={(e) => {
-                      handleKeyDown(e, stop);
+                      handleKeyDown(e, stop, getTime);
                     }}
                     onChange={(e) => setInput(e.target.value)}
                     value={input}
@@ -128,7 +125,7 @@ export default function Question({ modalStatus, day, onCloseModal }) {
                 <Button
                   disabled={!ready}
                   onClick={() => {
-                    handleSubmit(stop);
+                    handleSubmit(stop, getTime);
                   }}
                 >
                   [Submit]
