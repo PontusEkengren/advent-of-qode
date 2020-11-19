@@ -1,34 +1,42 @@
-import React from 'react';
-import { Link } from './Styled/defaults';
+import React, { useState } from 'react';
+import { Row } from './Styled/defaults';
 import { Branch } from './Styled/christmas.js';
 import { treeData } from './treeData.js';
-
-const getTreeData = () => {
-  const date = new Date().toISOString();
-  let month = date.slice(5, 7);
-  if (month === '11') {
-    let dayString = date.slice(8, 10);
-    const day = parseInt(dayString);
-
-    return treeData.map((branch) => {
-      return { ...branch, active: branch.day <= day };
-    });
-  }
-
-  return treeData;
-};
-
-const getBranchContent = (branch) => {
-  return (
-    <tr>
-      <td>{branch.active && branch.day > 0 ? <Link href='http://google.se'>{branch.ornament}</Link> : branch.ornament}</td>
-      <td>{branch.day > 0 ? branch.day : ''}</td>
-    </tr>
-  );
-};
+import Question from './Question';
 
 export default function Tree() {
-  getTreeData();
+  const [showQuestion, setShowQuestion] = useState(false);
+  const [day, setDay] = useState(null);
+
+  const getTreeData = () => {
+    const date = new Date().toISOString();
+    let month = date.slice(5, 7);
+    if (month === '11') {
+      let dayString = date.slice(8, 10);
+      const day = parseInt(dayString);
+
+      return treeData.map((branch) => {
+        return { ...branch, active: branch.day <= day };
+      });
+    }
+
+    return treeData;
+  };
+
+  const getBranchContent = (branch) => {
+    return (
+      <Row
+        active={branch.active && branch.day > 0}
+        onClick={() => {
+          setShowQuestion(true);
+          setDay(branch.day);
+        }}
+      >
+        <td>{branch.ornament}</td>
+        <td>{branch.day > 0 ? branch.day : ''}</td>
+      </Row>
+    );
+  };
   return (
     <div style={{ width: '950px', margin: '20px 0 0 40px' }}>
       {getTreeData().map((branch, i) => (
@@ -38,6 +46,8 @@ export default function Tree() {
           </table>
         </Branch>
       ))}
+
+      <Question handleCloseModal={() => setShowQuestion(false)} modalStatus={showQuestion} day={day} />
     </div>
   );
 }
