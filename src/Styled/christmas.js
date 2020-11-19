@@ -11,3 +11,6 @@ export const Ornament = styled.span`
   color: ${(props) => (props.color ? props.color : 'white')};
   text-shadow: ${(props) => (props.textShadow ? '0 0 5px' : '')};
 `;
+export const Title = styled.span`
+  color: ${(props) => (props.color ? props.color : Colours.green)};
+`;

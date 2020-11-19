@@ -19,13 +19,13 @@ export const Body = styled.div`
 `;
 
 export const Header = styled.header`
-  background-color: #0f0f23;
+  margin: 25px 20px 0 20px;
+
+  justify-content: space-between;
   display: flex;
-  flex-direction: column;
   font-size: calc(10px + 1.5vmin);
   text-decoration: none;
-  color: ${Colours.green};
-  margin-left: 20px;
+  color: ${Colours.lightGrey};
 `;
 
 export const Row = styled.tr`

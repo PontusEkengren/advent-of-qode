@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { Header, Body, ContainerCenterColumn } from './Styled/defaults';
+import { Title } from './Styled/christmas';
 import LeaderBoard from './LeaderBoard';
 import Tree from './Tree.js';
 import * as api from './api.js';
@@ -48,10 +49,12 @@ function App() {
   return (
     <>
       <Header>
-        <p>Advent of Qode</p>
+        <Title>Advent of Qode</Title>
+        {name && <span>Welcome {name}</span>}
+        {!name && <span>Login with google to play</span>}
       </Header>
       <Body>
-        <Tree userData={userScore} />
+        <Tree userData={userScore} disabled={!isLogined} />
 
         <ContainerCenterColumn>
           <GoogleAuth

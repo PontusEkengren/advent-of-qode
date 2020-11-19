@@ -4,7 +4,7 @@ import { Branch, Ornament } from './Styled/christmas.js';
 import { treeData } from './treeData.js';
 import Question from './Question';
 
-export default function Tree({ userData }) {
+export default function Tree({ userData, disabled }) {
   const [showQuestion, setShowQuestion] = useState(false);
   const [day, setDay] = useState(null);
   const [tree, setTree] = useState([]);
@@ -30,6 +30,8 @@ export default function Tree({ userData }) {
   }, [userData]);
 
   const isActive = (branch) => {
+    if (disabled) return false;
+
     return branch.active && branch.day > 0;
   };
 
@@ -46,7 +48,7 @@ export default function Tree({ userData }) {
       >
         <td>
           {[...branch.ornament].map((char, i) => {
-            var color = branch.active ? Colours.lightGrey : Colours.grey;
+            var color = isActive(branch) ? Colours.lightGrey : Colours.grey;
             // const color = Colours.lightGrey;
             if (branch.active && branch.completed) {
               switch (char) {
