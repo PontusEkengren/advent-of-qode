@@ -9,6 +9,10 @@ export const getUserScore = (userId) => {
   return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/advent/user?userId=${userId}`);
 };
 
+export const getQuery = (day) => {
+  return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/query?day=${day}`);
+};
+
 export const saveScore = (data) => {
   return axios.post(
     `${REACT_APP_ADVENT_OF_QODE_SERVER}/advent`,

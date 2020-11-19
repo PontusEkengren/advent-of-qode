@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { Colours, Button, Group, Input, ContainerCenterColumn } from './Styled/defaults';
+import * as api from './api.js';
 
 export default function Question({ modalStatus, day, onCloseModal }) {
   const [modalIsOpen, setIsOpen] = useState(modalStatus);
   const [input, setInput] = useState('');
+  const [questionOfTheDay, setQuestionOfTheDay] = useState('');
+  const [ready, setReady] = useState('');
 
   useEffect(() => {
     setIsOpen(modalStatus);
   }, [modalStatus]);
 
   const afterOpenModal = () => {
-    //Get the data
+    // if (day) {
+    //   api.getQuery(day).then((response) => {
+    //     setQuestionOfTheDay(response.data);
+    //   });
+    // }
+  };
+
+  const handleReady = () => {
+    api
+      .getQuery(day)
+      .then((response) => {
+        setQuestionOfTheDay(response.data.question);
+        setReady(true);
+      })
+      .catch(() => {
+        setQuestionOfTheDay('Unable to fetch data from database');
+      });
   };
 
   const customStyles = {
@@ -34,6 +53,7 @@ export default function Question({ modalStatus, day, onCloseModal }) {
 
   const handleCloseModal = () => {
     setInput('');
+    setReady(false);
     onCloseModal();
   };
 
@@ -41,8 +61,9 @@ export default function Question({ modalStatus, day, onCloseModal }) {
     <div>
       <Modal isOpen={modalIsOpen} ariaHideApp={false} onAfterOpen={afterOpenModal} onRequestClose={handleCloseModal} style={customStyles} contentLabel='Example Modal'>
         <ContainerCenterColumn>
-          <h2>Timer and "Ready button" here</h2>
-          <h2>Question goes here based on day clicked: {day && day}</h2>
+          <h2>Timer goes here</h2>
+          {ready && <h2>{questionOfTheDay}</h2>}
+          {!ready && <Button onClick={handleReady}>Ready</Button>}
           Answer:
           <Input onKeyDown={handleKeyDown} onChange={(e) => setInput(e.target.value)} value={input} />
           <Group>

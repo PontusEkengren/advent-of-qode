@@ -85,6 +85,11 @@ export default function Tree({ userData, disabled }) {
     );
   };
 
+  const handleCloseModal = () => {
+    setShowQuestion(false);
+    setDay(null);
+  };
+
   return (
     <div style={{ width: '950px', margin: '20px 0 0 40px', minWidth: '930px' }}>
       {tree.length > 0 &&
@@ -96,7 +101,7 @@ export default function Tree({ userData, disabled }) {
           </Branch>
         ))}
 
-      <Question onCloseModal={() => setShowQuestion(false)} modalStatus={showQuestion} day={day} />
+      <Question onCloseModal={handleCloseModal} modalStatus={showQuestion} day={day} />
     </div>
   );
 }
