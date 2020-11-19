@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as api from './api';
-import { Leaderboard, ContainerLeaderboard, LeaderboardHeader, LeaderboardSore } from './Styled/christmas.js';
+import { LeaderboardHeader } from './Styled/christmas.js';
 export default function LeaderBoard({ users }) {
   const [leaderBoard, setLeaderBoard] = useState(undefined);
 

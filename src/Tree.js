@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Colours, Row } from './Styled/defaults';
-import { Branch } from './Styled/christmas.js';
+import { Branch, Ornament } from './Styled/christmas.js';
 import { treeData } from './treeData.js';
 import Question from './Question';
 
@@ -23,13 +23,19 @@ export default function Tree() {
     return treeData;
   };
 
+  const isActive = (branch) => {
+    return branch.active && branch.day > 0;
+  };
+
   const getBranchContent = (branch) => {
     return (
       <Row
-        active={branch.active && branch.day > 0}
+        active={isActive(branch)}
         onClick={() => {
-          setShowQuestion(true);
-          setDay(branch.day);
+          if (isActive(branch)) {
+            setShowQuestion(true);
+            setDay(branch.day);
+          }
         }}
       >
         <td>
@@ -55,15 +61,14 @@ export default function Tree() {
                   color = Colours.red;
                   break;
                 default:
-                  console.log('Unknown char', char);
                   break;
               }
             }
 
             return (
-              <span key={i} style={{ color: color, textShadow: '0 0 5px' }}>
+              <Ornament key={i} color={color} textShadow={color !== Colours.lightGrey && color !== Colours.grey}>
                 {char}
-              </span>
+              </Ornament>
             );
           })}
         </td>
@@ -71,6 +76,7 @@ export default function Tree() {
       </Row>
     );
   };
+
   return (
     <div style={{ width: '950px', margin: '20px 0 0 40px' }}>
       {getTreeData().map((branch, i) => (
