@@ -41,8 +41,8 @@ export const Row = styled.tr`
 export const Input = styled.input`
   margin-top: 15px;
   background: transparent;
-  color: ${Colours.lightGrey};
-  border: 1px solid ${Colours.grey};
+  color: ${(props) => (props.color ? props.color : Colours.lightGrey)};
+  border: 1px solid ${(props) => (props.color ? props.color : Colours.lightGrey)};
   background: ${Colours.almostBlack};
   padding: 0 2px;
   font-family: inherit;

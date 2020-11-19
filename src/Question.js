@@ -9,7 +9,9 @@ export default function Question({ modalStatus, day, onCloseModal }) {
   const [input, setInput] = useState('');
   const [questionOfTheDay, setQuestionOfTheDay] = useState('');
   const [ready, setReady] = useState('');
-  const [timer, setTimer] = useState('');
+  const [incorrectAnswer, SetIncorrectAnswer] = useState('');
+  const [hint, setHint] = useState(null);
+  const [correctAnswer, SetCorrectAnswer] = useState(false);
 
   useEffect(() => {
     setIsOpen(modalStatus);
@@ -49,24 +51,56 @@ export default function Question({ modalStatus, day, onCloseModal }) {
     }
   };
 
+  const getColor = () => {
+    if (correctAnswer) return Colours.green;
+    return incorrectAnswer ? Colours.red : Colours.lightGrey;
+  };
+
   const handleSubmit = (stop) => {
     //Sumbit answer
-    console.log('Sumbit!', input);
-
-    //if correct
-    // stop();
+    if (ready && input) {
+      api
+        .submitAnswer(day, input)
+        .then((response) => {
+          if (response.data === 'correct') {
+            stop();
+            SetCorrectAnswer(true);
+            setQuestionOfTheDay('You found the right answer!');
+            //Submit result
+          } else {
+            SetIncorrectAnswer(true);
+            setTimeout(() => SetIncorrectAnswer(false), 750);
+          }
+        })
+        .catch(() => {
+          setQuestionOfTheDay('Unable to fetch data from database');
+        });
+    }
   };
 
   const handleCloseModal = () => {
     setInput('');
     setReady(false);
     onCloseModal();
+    SetCorrectAnswer(false);
+    SetIncorrectAnswer('');
   };
 
   return (
     <div>
       <Modal isOpen={modalIsOpen} ariaHideApp={false} onAfterOpen={afterOpenModal} onRequestClose={handleCloseModal} style={customStyles} contentLabel='Example Modal'>
-        <Timer startImmediately={false} onStop={() => console.log('onStop hook')}>
+        <Timer
+          startImmediately={false}
+          checkpoints={[
+            {
+              time: 60000,
+              callback: () => {
+                setHint('Guessing is free!');
+                setTimeout(() => setHint(null), 20000);
+              },
+            },
+          ]}
+        >
           {({ start, resume, pause, stop, reset, timerState }) => (
             <ContainerCenterColumn>
               <div>
@@ -76,12 +110,12 @@ export default function Question({ modalStatus, day, onCloseModal }) {
                 </TimerContainer>
               </div>
               {!ready && <Button onClick={() => handleReady(start)}>Ready</Button>}
-
               {ready && <h2>{questionOfTheDay}</h2>}
               <FlexContainer>
                 <div style={{ margin: '15px 10px 0 0' }}>Answer: </div>
                 <div>
                   <Input
+                    color={getColor()}
                     onKeyDown={(e) => {
                       handleKeyDown(e, stop);
                     }}
@@ -92,6 +126,7 @@ export default function Question({ modalStatus, day, onCloseModal }) {
               </FlexContainer>
               <Group>
                 <Button
+                  disabled={!ready}
                   onClick={() => {
                     handleSubmit(stop);
                   }}
@@ -99,6 +134,8 @@ export default function Question({ modalStatus, day, onCloseModal }) {
                   [Submit]
                 </Button>
                 <Button onClick={handleCloseModal}>[Go back]</Button>
+
+                {hint && <div>{hint}</div>}
               </Group>
             </ContainerCenterColumn>
           )}
