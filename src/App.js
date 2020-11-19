@@ -18,16 +18,15 @@ function App() {
   const [imageUrl, setImageUrl] = storage.useLocalStorage('imageUrl', undefined);
 
   useEffect(() => {
-    api.getUserScore().then((response) => {
+    api.getUserScore(email).then((response) => {
       setUserScore(response.data);
     });
-  }, []);
+  }, [email]);
 
   const login = (response) => {
     if (response.accessToken) {
-      console.log('profile', response.profileObj);
       setIsLogined(true);
-      setAccessToken(response.profileObj.googleId);
+      setAccessToken(response.profileObj.email); //Todo Change to tokens //https://developers.google.com/identity/sign-in/web/backend-auth
       setName(response.profileObj.name);
       setEmail(response.profileObj.email);
       setImageUrl(response.profileObj.imageUrl);
@@ -46,18 +45,10 @@ function App() {
   };
 
   const handleLogoutFailure = (response) => {
-    alert('Failed to log out');
+    console.log('Failed to log out', response);
   };
 
   const handleSubmit = (time, day) => {
-    console.log('test time: ', time);
-
-    // {
-    //   public string UserId { get; set; }
-    //   public int Score { get; set; }
-    //   public string Email { get; set; }
-    //   public int Question { get; set; }
-
     const data = {
       userId: accessToken,
       score: time,
@@ -72,6 +63,7 @@ function App() {
         // setReady(true);
         // start();
         console.log('Submit Success', response);
+        setTimeout(() => window.location.reload(false), 2200);
       })
       .catch((e) => {
         console.log('error', e);

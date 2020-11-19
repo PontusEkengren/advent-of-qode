@@ -6,17 +6,13 @@ export const getLeaderBoard = () => {
 };
 
 export const getUserScore = (userId) => {
+  console.log('asing for', userId);
   return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/advent/user?userId=${userId}`);
 };
 
 export const getQuery = (day) => {
   return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/query?day=${day}`);
 };
-
-// public string UserId { get; set; }
-// public int Score { get; set; }
-// public string Email { get; set; }
-// public int Question { get; set; }
 
 export const createUserScore = (data) => {
   return axios.post(

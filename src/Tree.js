@@ -25,7 +25,6 @@ export default function Tree({ userData, disabled, onSubmit }) {
   };
 
   useEffect(() => {
-    console.log('userData', userData);
     setTree(getTreeData(userData));
   }, [userData]);
 
