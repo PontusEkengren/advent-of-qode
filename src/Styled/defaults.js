@@ -7,6 +7,10 @@ export const Colours = {
   lightGrey: '#cccccc',
   grey: '#666666',
   almostBlack: '#10101a',
+  orange: '#ff9900',
+  yellow: '#ffff66',
+  blue: '#0066ff',
+  red: '#ff0000',
 };
 
 export const Body = styled.div`

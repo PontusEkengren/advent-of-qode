@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row } from './Styled/defaults';
+import { Colours, Row } from './Styled/defaults';
 import { Branch } from './Styled/christmas.js';
 import { treeData } from './treeData.js';
 import Question from './Question';
@@ -32,7 +32,41 @@ export default function Tree() {
           setDay(branch.day);
         }}
       >
-        <td>{branch.ornament}</td>
+        <td>
+          {[...branch.ornament].map((char, i) => {
+            var color = branch.active ? Colours.lightGrey : Colours.grey;
+            // const color = Colours.lightGrey;
+            if (branch.active) {
+              switch (char) {
+                case 'o':
+                  color = Colours.orange;
+                  break;
+                case '>':
+                case '<':
+                  color = Colours.green;
+                  break;
+                case '*':
+                  color = Colours.yellow;
+                  break;
+                case 'O':
+                  color = Colours.blue;
+                  break;
+                case '@':
+                  color = Colours.red;
+                  break;
+                default:
+                  console.log('Unknown char', char);
+                  break;
+              }
+            }
+
+            return (
+              <span key={i} style={{ color: color, textShadow: '0 0 5px' }}>
+                {char}
+              </span>
+            );
+          })}
+        </td>
         <td>{branch.day > 0 ? branch.day : ''}</td>
       </Row>
     );

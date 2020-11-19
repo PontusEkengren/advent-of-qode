@@ -30,27 +30,5 @@ export default function LeaderBoard({ users }) {
           </div>
         ))}
     </>
-    // <ContainerLeaderboard>
-    //   <LeaderboardHeader>Leaderboard</LeaderboardHeader>
-    //   {leaderBoard &&
-    //     leaderBoard.map((user, i) => (
-    //       <Leaderboard key={i}>
-    //         <div>{user.email}</div>
-    //         <LeaderboardSore>{user.score}</LeaderboardSore>
-    //       </Leaderboard>
-    //     ))}
-    // </ContainerLeaderboard>
   );
-  //   return (
-  //     <ContainerLeaderboard>
-  //       <LeaderboardHeader>Leaderboard</LeaderboardHeader>
-  //       {leaderBoard &&
-  //         leaderBoard.map((user, i) => (
-  //           <Leaderboard key={i}>
-  //             <div>{user.email}</div>
-  //             <LeaderboardSore>{user.score}</LeaderboardSore>
-  //           </Leaderboard>
-  //         ))}
-  //     </ContainerLeaderboard>
-  //   );
 }
