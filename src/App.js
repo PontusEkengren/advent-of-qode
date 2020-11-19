@@ -1,6 +1,7 @@
 import './App.css';
 import { Header, Body } from './Styled/defaults';
 import Tree from './Tree.js';
+import LeaderBoard from './LeaderBoard';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       </Header>
       <Body>
         <Tree />
+        <LeaderBoard />
       </Body>
     </>
   );
