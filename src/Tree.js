@@ -3,21 +3,21 @@ import { Colours, Row } from './Styled/defaults';
 import { Branch, Ornament } from './Styled/christmas.js';
 import { treeData } from './treeData.js';
 import Question from './Question';
+const { REACT_APP_ACTIVE_MONTH } = process.env;
 
 export default function Tree({ userData, disabled, onSubmit }) {
   const [showQuestion, setShowQuestion] = useState(false);
-  const [day, setDay] = useState(null);
   const [tree, setTree] = useState([]);
+  const date = new Date().toISOString();
+  let dayString = date.slice(8, 10);
+  let today = parseInt(dayString);
+  // today = 4; //For debug pupose
 
   const getTreeData = (userData) => {
-    const date = new Date().toISOString();
     let month = date.slice(5, 7);
-    if (month === '11') {
-      let dayString = date.slice(8, 10);
-      const day = parseInt(dayString);
-
+    if (month === REACT_APP_ACTIVE_MONTH ? `${REACT_APP_ACTIVE_MONTH}` : '12') {
       return treeData.map((branch) => {
-        return { ...branch, active: branch.day <= day, completed: userData.some((x) => x.question === branch.day) };
+        return { ...branch, active: branch.day <= today, completed: userData.some((x) => x.question === branch.day) };
       });
     }
 
@@ -31,7 +31,7 @@ export default function Tree({ userData, disabled, onSubmit }) {
   const isActive = (branch) => {
     if (disabled) return false;
 
-    return branch.active && branch.day > 0;
+    return branch.active && branch.day === today;
   };
 
   const getBranchContent = (branch) => {
@@ -41,7 +41,6 @@ export default function Tree({ userData, disabled, onSubmit }) {
         onClick={() => {
           if (isActive(branch)) {
             setShowQuestion(true);
-            setDay(branch.day);
           }
         }}
       >
@@ -86,11 +85,10 @@ export default function Tree({ userData, disabled, onSubmit }) {
 
   const handleCloseModal = () => {
     setShowQuestion(false);
-    setDay(null);
   };
 
   const handleSubmit = (time) => {
-    onSubmit(time, day);
+    onSubmit(time, today);
   };
 
   return (
@@ -104,7 +102,7 @@ export default function Tree({ userData, disabled, onSubmit }) {
           </Branch>
         ))}
 
-      <Question onCloseModal={handleCloseModal} modalStatus={showQuestion} day={day} onSubmitResult={handleSubmit} />
+      <Question onCloseModal={handleCloseModal} modalStatus={showQuestion} day={today} onSubmitResult={handleSubmit} />
     </div>
   );
 }
