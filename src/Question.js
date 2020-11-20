@@ -63,7 +63,7 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
             setQuestionOfTheDay('Try again tomorrow');
             stop();
             onSubmitResult(-1);
-            setTimeout(() => SetIncorrectAnswer(false), 750);
+            setTimeout(() => SetIncorrectAnswer(false), 2200);
           }
         })
         .catch((e) => {
