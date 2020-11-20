@@ -38,19 +38,8 @@ export const Row = styled.tr`
   }`}
 `;
 
-export const Input = styled.input`
-  margin-top: 15px;
-  background: transparent;
-  color: ${(props) => (props.color ? props.color : Colours.lightGrey)};
-  border: 1px solid ${(props) => (props.color ? props.color : Colours.lightGrey)};
-  background: ${Colours.almostBlack};
-  padding: 0 2px;
-  font-family: inherit;
-  font-size: inherit;
-`;
-
 export const Group = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
   display: inherit;
   flex-direction: inherit;
 `;
@@ -87,6 +76,13 @@ export const FlexContainer = styled.div`
   justify-content: space-between;
   outline: none;
   ${(props) => props.height && `height: ${props.height}px`};
+`;
+
+export const FlexInputContainer = styled.div`
+  display: flex;
+  margin-bottom: 15px;
+  color: ${(props) => (props.color ? props.color : Colours.lightGrey)};
+  flex-wrap: wrap;
 `;
 
 export const ContainerCenter = styled.div`

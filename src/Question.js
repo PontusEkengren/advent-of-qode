@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import { Colours, Button, Group, Input, TimerContainer, ContainerCenterColumn, FlexContainer } from './Styled/defaults';
+import { Colours, Button, Group, FlexInputContainer, TimerContainer, ContainerCenterColumn, FlexContainer } from './Styled/defaults';
 import * as api from './api.js';
 import Timer from 'react-compound-timer';
 
@@ -8,6 +8,7 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
   const [modalIsOpen, setIsOpen] = useState(modalStatus);
   const [input, setInput] = useState('');
   const [questionOfTheDay, setQuestionOfTheDay] = useState('');
+  const [options, setOptions] = useState([]);
   const [ready, setReady] = useState('');
   const [incorrectAnswer, SetIncorrectAnswer] = useState('');
   const [hint, setHint] = useState(null);
@@ -22,6 +23,7 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
       .getQuery(day)
       .then((response) => {
         setQuestionOfTheDay(response.data.question);
+        setOptions(response.data.options);
         setReady(true);
         start();
       })
@@ -38,12 +40,6 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
   };
   const afterOpenModal = () => {};
 
-  const handleKeyDown = (e, stop, getTime) => {
-    if (e.keyCode === 13) {
-      handleSubmit(stop, getTime);
-    }
-  };
-
   const getColor = () => {
     if (correctAnswer) return Colours.green;
     return incorrectAnswer ? Colours.red : Colours.lightGrey;
@@ -51,7 +47,6 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
 
   const handleSubmit = (stop, getTime) => {
     const roundedTime = Math.round(Math.floor(getTime()) / 1000);
-    console.log('getTime', roundedTime);
     if (ready && input) {
       //Sumbit answer
       api
@@ -65,10 +60,14 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
             onSubmitResult(roundedTime);
           } else {
             SetIncorrectAnswer(true);
+            setQuestionOfTheDay('Try again tomorrow');
+            stop();
+            onSubmitResult(-1);
             setTimeout(() => SetIncorrectAnswer(false), 750);
           }
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log('Error', e);
           setQuestionOfTheDay('Unable to fetch data from database');
         });
     }
@@ -77,6 +76,7 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
   const handleCloseModal = () => {
     setInput('');
     setReady(false);
+    setOptions([]);
     onCloseModal();
     SetCorrectAnswer(false);
     SetIncorrectAnswer('');
@@ -92,7 +92,7 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
             {
               time: 60000,
               callback: () => {
-                setHint('Guessing is free!');
+                // setHint('Guessing is free!');
                 setTimeout(() => setHint(null), 20000);
               },
             },
@@ -106,21 +106,23 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
                   <Timer.Seconds />
                 </TimerContainer>
               </div>
+              {!ready && day === 1 && <h2 style={{ color: getColor() }}>You can only guess/submit one time</h2>}
+              {!ready && day !== 1 && <h2 style={{ color: getColor() }}>Remeber, you can only guess once</h2>}
               {!ready && <Button onClick={() => handleReady(start)}>Ready</Button>}
-              {ready && <h2>{questionOfTheDay}</h2>}
-              <FlexContainer>
-                <div style={{ margin: '15px 10px 0 0' }}>Answer: </div>
-                <div>
-                  <Input
-                    color={getColor()}
-                    onKeyDown={(e) => {
-                      handleKeyDown(e, stop, getTime);
-                    }}
-                    onChange={(e) => setInput(e.target.value)}
-                    value={input}
-                  />
-                </div>
-              </FlexContainer>
+              {ready && <h2 style={{ color: getColor() }}>{questionOfTheDay}</h2>}
+              {options && (
+                <Group onChange={(e) => setInput(e.target.value)}>
+                  {options.map((o, i) => (
+                    <FlexInputContainer key={`FlexInputContainer${i}`}>
+                      <input type='radio' value={o} name='options' key={`input${i}`} />
+                      <span key={`span${i}`}>{o}</span>
+                    </FlexInputContainer>
+                  ))}
+                </Group>
+              )}
+              {/* <div>
+                  <Input color={getColor()} onChange={(e) => setInput(e.target.value)} value={input} />
+                </div> */}
               <Group>
                 <Button
                   disabled={!ready}

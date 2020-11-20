@@ -11,13 +11,14 @@ export default function Tree({ userData, disabled, onSubmit }) {
   const date = new Date().toISOString();
   let dayString = date.slice(8, 10);
   let today = parseInt(dayString);
-  // today = 4; //For debug pupose
+  const todaysBranch = tree.find((b) => b.day === today);
+  // today = 1; //For debug purpose
 
   const getTreeData = (userData) => {
     let month = date.slice(5, 7);
     if (month === REACT_APP_ACTIVE_MONTH ? `${REACT_APP_ACTIVE_MONTH}` : '12') {
       return treeData.map((branch) => {
-        return { ...branch, active: branch.day <= today, completed: userData.some((x) => x.question === branch.day) };
+        return { ...branch, active: branch.day <= today, clickable: !userData.find((u) => u.question === branch.day && u.score === '-1'), completed: userData.some((x) => x.question === branch.day) };
       });
     }
 
@@ -37,9 +38,9 @@ export default function Tree({ userData, disabled, onSubmit }) {
   const getBranchContent = (branch) => {
     return (
       <Row
-        active={isActive(branch)}
+        active={isActive(branch) && branch.clickable && !branch.completed}
         onClick={() => {
-          if (isActive(branch)) {
+          if (isActive(branch) && branch.clickable && !branch.completed) {
             setShowQuestion(true);
           }
         }}
@@ -48,7 +49,7 @@ export default function Tree({ userData, disabled, onSubmit }) {
           {[...branch.ornament].map((char, i) => {
             var color = isActive(branch) ? Colours.lightGrey : Colours.grey;
             // const color = Colours.lightGrey;
-            if (branch.active && branch.completed) {
+            if (branch.active && branch.completed && branch.clickable) {
               switch (char) {
                 case 'o':
                   color = Colours.orange;
@@ -93,6 +94,7 @@ export default function Tree({ userData, disabled, onSubmit }) {
 
   return (
     <div style={{ width: '950px', margin: '20px 0 0 40px', minWidth: '930px' }}>
+      {tree.length > 0 && !todaysBranch.clickable && todaysBranch.completed && <div style={{ color: Colours.lightGrey }}>Come back tomorrow for a new challange!</div>}
       {tree.length > 0 &&
         tree.map((branch, i) => (
           <Branch active={branch.active} key={i}>
