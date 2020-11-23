@@ -101,3 +101,21 @@ export const Image = styled.img`
 export const TimerContainer = styled.h2`
   color: ${Colours.green};
 `;
+
+export const LeftCell = styled.td`
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const RightCell = styled.td`
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 15%;
+`;
+
+export const RightHeader = styled.th`
+  text-align: right;
+  width: 15%;
+`;

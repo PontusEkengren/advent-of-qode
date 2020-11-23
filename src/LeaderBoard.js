@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import * as api from './api';
-import { LeaderboardHeader } from './Styled/christmas.js';
-export default function LeaderBoard({ users }) {
+import { LeaderBoardRow, LeaderBoardContainer, LeaderboardHeader } from './Styled/christmas.js';
+import { LeftCell, RightCell, RightHeader } from './Styled/defaults';
+export default function LeaderBoard({}) {
   const [leaderBoard, setLeaderBoard] = useState(undefined);
 
   useEffect(() => {
@@ -20,15 +21,25 @@ export default function LeaderBoard({ users }) {
   }, [leaderBoard]);
 
   return (
-    <>
+    <LeaderBoardContainer>
       <LeaderboardHeader>Leaderboard</LeaderboardHeader>
-      {leaderBoard &&
-        leaderBoard.map((user, i) => (
-          <div key={i}>
-            <div>{user.email}</div>
-            <div>{user.score}</div>
-          </div>
-        ))}
-    </>
+      <table>
+        <tbody>
+          <tr>
+            <th></th>
+            <RightHeader>Days</RightHeader>
+            <RightHeader>Seconds</RightHeader>
+          </tr>
+          {leaderBoard &&
+            leaderBoard.map((user, i) => (
+              <LeaderBoardRow key={i}>
+                <LeftCell>{user.email}</LeftCell>
+                <RightCell>{user.numberOfDays}</RightCell>
+                <RightCell>{user.score}</RightCell>
+              </LeaderBoardRow>
+            ))}
+        </tbody>
+      </table>
+    </LeaderBoardContainer>
   );
 }
