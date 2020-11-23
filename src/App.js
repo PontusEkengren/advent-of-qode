@@ -62,7 +62,6 @@ function App() {
         // setQuestionOfTheDay(response.data.question);
         // setReady(true);
         // start();
-        console.log('Submit Success', response);
         setTimeout(() => window.location.reload(false), 2200);
       })
       .catch((e) => {
