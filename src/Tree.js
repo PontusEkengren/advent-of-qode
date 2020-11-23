@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Colours, Row } from './Styled/defaults';
 import { Branch, Ornament } from './Styled/christmas.js';
 import { treeData } from './treeData.js';
@@ -14,20 +14,26 @@ export default function Tree({ userData, disabled, onSubmit }) {
   const todaysBranch = tree.find((b) => b.day === today);
   // today = 1; //For debug purpose
 
-  const getTreeData = (userData) => {
+  const getTreeData = useCallback((userData) => {
+    const date = new Date().toISOString();
     let month = date.slice(5, 7);
     if (month === REACT_APP_ACTIVE_MONTH ? `${REACT_APP_ACTIVE_MONTH}` : '12') {
       return treeData.map((branch) => {
-        return { ...branch, active: branch.day <= today, clickable: !userData.find((u) => u.question === branch.day && u.score === '-1'), completed: userData.some((x) => x.question === branch.day) };
+        return {
+          ...branch,
+          active: branch.day <= parseInt(date.slice(8, 10)),
+          clickable: !userData.find((u) => u.question === branch.day && u.score === '-1'),
+          completed: userData.some((x) => x.question === branch.day),
+        };
       });
     }
 
     return treeData;
-  };
+  }, []);
 
   useEffect(() => {
     setTree(getTreeData(userData));
-  }, [userData]);
+  }, [userData, getTreeData]);
 
   const isActive = (branch) => {
     if (disabled) return false;
