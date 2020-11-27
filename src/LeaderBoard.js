@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as api from './api';
 import { LeaderBoardRow, LeaderBoardContainer, LeaderboardHeader } from './Styled/christmas.js';
 import { LeftCell, RightCell, RightHeader } from './Styled/defaults';
-export default function LeaderBoard({}) {
+export default function LeaderBoard() {
   const [leaderBoard, setLeaderBoard] = useState(undefined);
 
   useEffect(() => {
