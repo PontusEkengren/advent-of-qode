@@ -7,11 +7,12 @@ import { Button, Content, FlexInputContainer, Group, Row } from './Styled/defaul
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@material-ui/core';
 import * as api from './api.js';
 
-export default function AdminView({ token }) {
+export default function AdminView({ token, onTokenRefresh }) {
   const [date, setDate] = useState(moment(`${moment().year()}-12-01`).toDate());
   const [question, setQuestion] = useState();
   const [options, setOptions] = useState();
   const [errorMessage, setErrorMessage] = useState();
+  const [saveStatus, setSaveStatus] = useState();
 
   registerLocale('en-GB', enGB);
 
@@ -36,15 +37,29 @@ export default function AdminView({ token }) {
           setErrorMessage(null);
         })
         .catch((err) => {
-          if (err?.response?.status === 403) {
+          if (err?.response?.status === 401) {
             setErrorMessage('Unauthorized');
+            onTokenRefresh();
           }
         });
     }
   }, [date, token]);
 
   const handleSave = () => {
-    api.addOrUpdateQuestion(moment(date).format('D'), question, options, token);
+    api
+      .addOrUpdateQuestion(moment(date).format('D'), question, options, token)
+      .then(() => {
+        setSaveStatus(' ✓ ');
+        setTimeout(() => {
+          setSaveStatus();
+        }, 1200);
+      })
+      .catch((err) => {
+        if (err?.response?.status === 401) {
+          setErrorMessage('Unauthorized');
+          onTokenRefresh();
+        }
+      });
   };
 
   const handleLabelChange = (event, optionId) => {
@@ -65,7 +80,6 @@ export default function AdminView({ token }) {
         ...options,
         { text: `Option nr ${options.length + 1}`, id: options.length, isCorrectAnswer: false },
       ];
-      console.log('newOptions', newOptions);
       setOptions(newOptions);
     }
   };
@@ -137,7 +151,7 @@ export default function AdminView({ token }) {
       </Row>
       <Row>
         <Button onClick={handleSave} style={{ marginTop: 35 }}>
-          Save
+          Save {saveStatus}
         </Button>
       </Row>
     </Content>

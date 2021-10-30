@@ -17,7 +17,7 @@ function App() {
   const [userScore, setUserScore] = useState([]);
   const [isLogined, setIsLogined] = storage.useLocalStorage('isLogined', false);
   const [accessToken, setAccessToken] = storage.useLocalStorage('googleId', '');
-  const [accessIdToken, setAccessIdToken] = storage.useLocalStorage('accessIdToken', '');
+  const [accessIdToken, setAccessIdToken] = storage.useLocalStorage('accessIdToken', undefined);
   const [name, setName] = storage.useLocalStorage('name', '');
   const [email, setEmail] = storage.useLocalStorage('email', '');
   const [imageUrl, setImageUrl] = storage.useLocalStorage('imageUrl', undefined);
@@ -77,6 +77,10 @@ function App() {
       });
   };
 
+  const refreshAccess = () => {
+    logout();
+  };
+
   const theme = createMuiTheme({ palette: { type: 'dark' } });
 
   return (
@@ -91,7 +95,7 @@ function App() {
           <FlexContainer>
             <BrowserRouter>
               <Route path='/admin'>
-                <AdminView token={accessIdToken}></AdminView>
+                <AdminView token={accessIdToken} onTokenRefresh={refreshAccess}></AdminView>
               </Route>
               <Route exact path='/'>
                 <Tree userData={userScore} disabled={!isLogined} onSubmit={handleSubmit} />
