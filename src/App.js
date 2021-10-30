@@ -15,7 +15,7 @@ function App() {
   const [userScore, setUserScore] = useState([]);
   const [isLogined, setIsLogined] = storage.useLocalStorage('isLogined', false);
   const [accessToken, setAccessToken] = storage.useLocalStorage('googleId', '');
-  const [accessIdToken, setAccessIdToken] = storage.useLocalStorage('googleAccessIdToken', '');
+  const [accessIdToken, setAccessIdToken] = useState('invalidToken');
   const [name, setName] = storage.useLocalStorage('name', '');
   const [email, setEmail] = storage.useLocalStorage('email', '');
   const [imageUrl, setImageUrl] = storage.useLocalStorage('imageUrl', undefined);
@@ -29,7 +29,7 @@ function App() {
   const login = (response) => {
     if (response.accessToken) {
       setIsLogined(true);
-      setAccessIdToken(response.tokenId); //Todo Change to tokens //https://developers.google.com/identity/sign-in/web/backend-auth
+      setAccessIdToken(response.tokenId);
       setAccessToken(response.profileObj.email); //Todo Change to tokens //https://developers.google.com/identity/sign-in/web/backend-auth
       setName(response.profileObj.name);
       setEmail(response.profileObj.email);

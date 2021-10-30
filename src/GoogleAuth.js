@@ -1,5 +1,4 @@
-import React from // , { useEffect }
-'react';
+import React from 'react'; // , { useEffect }
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { Image, ContainerCenter } from './Styled/defaults';
 
@@ -12,10 +11,6 @@ export default function GoogleAuth({
   onLogOutFailure,
   onLogInFailure,
 }) {
-  // useEffect(() => {
-  //   console.log('log', imageUrl, isLogined, clientId, handleSuccess, onLogoutSuccess, onLogOutFailure, onLogInFailure);
-  // }, [imageUrl, isLogined, clientId, handleSuccess, onLogoutSuccess, onLogOutFailure, onLogInFailure]);
-
   return (
     <ContainerCenter>
       {imageUrl && <Image src={imageUrl} />}
