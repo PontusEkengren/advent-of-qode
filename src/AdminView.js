@@ -29,6 +29,8 @@ export default function AdminView({ token }) {
 
           if (response.data.options?.length) {
             setOptions(response.data.options.map((o, index) => ({ ...o, id: index })));
+          } else {
+            setOptions([{ text: 'Option nr 1', id: 0, isCorrectAnswer: false }]);
           }
 
           setErrorMessage(null);
@@ -59,7 +61,10 @@ export default function AdminView({ token }) {
 
   const moreOptions = () => {
     if (options) {
-      const newOptions = [...options, { text: 'New option', id: options.length, isCorrectAnswer: false }];
+      const newOptions = [
+        ...options,
+        { text: `Option nr ${options.length + 1}`, id: options.length, isCorrectAnswer: false },
+      ];
       console.log('newOptions', newOptions);
       setOptions(newOptions);
     }
