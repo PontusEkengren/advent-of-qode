@@ -3,8 +3,7 @@ import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import enGB from 'date-fns/locale/en-GB';
-import { Body, FlexContainer, FlexInputContainer, Group, Row } from './Styled/defaults';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { Body, Button, Content, FlexContainer, FlexInputContainer, Group, Row } from './Styled/defaults';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@material-ui/core';
 import * as api from './api.js';
 
@@ -30,7 +29,7 @@ export default function AdminView({ token }) {
         .then((response) => {
           console.log('response.data', response.data);
 
-          setQuestion(response.question);
+          setQuestion(response.data.question);
 
           if (response.options?.length) {
             setOptions(response.options);
@@ -45,11 +44,11 @@ export default function AdminView({ token }) {
         });
     }
   }, [date]);
-
-  const theme = createMuiTheme({ palette: { type: 'dark' } });
-
+  const handleSave = () => {
+    console.log('save');
+  };
   return (
-    <Body>
+    <Content>
       <Row>
         <ReactDatePicker
           selected={date}
@@ -66,31 +65,39 @@ export default function AdminView({ token }) {
       </Row>
 
       <Row>
-        <TextField>{question}</TextField>
+        <TextField
+          multiline
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          style={{ width: 400 }}
+        ></TextField>
       </Row>
       <Row>
         {options && (
-          <ThemeProvider theme={theme}>
-            <Group>
-              <FormControl component='fieldset'>
-                <RadioGroup aria-label='gender' name='gender1' value={'value'} onChange={(e) => {}}>
-                  {options.map((o, i) => (
-                    <FlexInputContainer key={`FlexInputContainer${i}`}>
-                      <FormControlLabel
-                        key={`FormControlLabel${i}`}
-                        value={o}
-                        control={<Radio />}
-                        label={o}
-                        // checked={}
-                      />
-                    </FlexInputContainer>
-                  ))}
-                </RadioGroup>
-              </FormControl>
-            </Group>
-          </ThemeProvider>
+          <Group>
+            <FormControl component='fieldset'>
+              <RadioGroup aria-label='gender' name='gender1' value={'value'} onChange={(e) => {}}>
+                {options.map((o, i) => (
+                  <FlexInputContainer key={`FlexInputContainer${i}`}>
+                    <FormControlLabel
+                      key={`FormControlLabel${i}`}
+                      value={o}
+                      control={<Radio />}
+                      label={o}
+                      // checked={}
+                    />
+                  </FlexInputContainer>
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </Group>
         )}
       </Row>
-    </Body>
+      <Row>
+        <Button onClick={handleSave} style={{ marginTop: 35 }}>
+          Save
+        </Button>
+      </Row>
+    </Content>
   );
 }

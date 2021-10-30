@@ -10,7 +10,7 @@ export const getUserScore = (userId) => {
 };
 
 export const getQueryAsAdmin = (day, token) => {
-  return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/admin?day=${day}&token=${token}`);
+  return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/admin?day=${day}`, { headers: { Authorization: token } });
 };
 
 export const getQuery = (day) => {

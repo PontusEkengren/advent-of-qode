@@ -44,6 +44,12 @@ export const Group = styled.div`
   flex-direction: inherit;
 `;
 
+export const Content = styled.div`
+  text-align: center;
+  color: #ffffff;
+  margin: 30px;
+`;
+
 export const Button = styled.button`
   margin-top: 1px;
   height: 35px;

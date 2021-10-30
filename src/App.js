@@ -9,13 +9,15 @@ import GoogleAuth from './GoogleAuth';
 import * as storage from './storage';
 import { Route, BrowserRouter } from 'react-router-dom';
 import AdminView from './AdminView';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
 const { REACT_APP_CLIENT_ID } = process.env;
 
 function App() {
   const [userScore, setUserScore] = useState([]);
   const [isLogined, setIsLogined] = storage.useLocalStorage('isLogined', false);
   const [accessToken, setAccessToken] = storage.useLocalStorage('googleId', '');
-  const [accessIdToken, setAccessIdToken] = useState('invalidToken');
+  const [accessIdToken, setAccessIdToken] = storage.useLocalStorage('accessIdToken', '');
   const [name, setName] = storage.useLocalStorage('name', '');
   const [email, setEmail] = storage.useLocalStorage('email', '');
   const [imageUrl, setImageUrl] = storage.useLocalStorage('imageUrl', undefined);
@@ -40,6 +42,7 @@ function App() {
   const logout = (response) => {
     setIsLogined(false);
     setAccessToken('');
+    setAccessIdToken('');
     setName('');
     setImageUrl('');
   };
@@ -74,37 +77,41 @@ function App() {
       });
   };
 
+  const theme = createMuiTheme({ palette: { type: 'dark' } });
+
   return (
     <>
-      <Header>
-        <Title>Advent of Qode</Title>
-        {name && <span>Welcome {name}</span>}
-        {!name && <span>Login with google to play</span>}
-      </Header>
-      <Body>
-        <FlexContainer>
-          <BrowserRouter>
-            <Route path='/admin'>
-              <AdminView token={accessIdToken}></AdminView>
-            </Route>
-            <Route exact path='/'>
-              <Tree userData={userScore} disabled={!isLogined} onSubmit={handleSubmit} />
-            </Route>
-          </BrowserRouter>
-          <ContainerCenterColumn>
-            <GoogleAuth
-              imageUrl={imageUrl}
-              isLogined={isLogined}
-              clientId={REACT_APP_CLIENT_ID}
-              handleSuccess={login}
-              onLogoutSuccess={logout}
-              onLogOutFailure={handleLogoutFailure}
-              onLogInFailure={handleLoginFailure}
-            />
-            <LeaderBoard />
-          </ContainerCenterColumn>
-        </FlexContainer>
-      </Body>
+      <ThemeProvider theme={theme}>
+        <Header>
+          <Title>Advent of Qode</Title>
+          {name && <span>Welcome {name}</span>}
+          {!name && <span>Login with google to play</span>}
+        </Header>
+        <Body>
+          <FlexContainer>
+            <BrowserRouter>
+              <Route path='/admin'>
+                <AdminView token={accessIdToken}></AdminView>
+              </Route>
+              <Route exact path='/'>
+                <Tree userData={userScore} disabled={!isLogined} onSubmit={handleSubmit} />
+              </Route>
+            </BrowserRouter>
+            <ContainerCenterColumn>
+              <GoogleAuth
+                imageUrl={imageUrl}
+                isLogined={isLogined}
+                clientId={REACT_APP_CLIENT_ID}
+                handleSuccess={login}
+                onLogoutSuccess={logout}
+                onLogOutFailure={handleLogoutFailure}
+                onLogInFailure={handleLoginFailure}
+              />
+              <LeaderBoard />
+            </ContainerCenterColumn>
+          </FlexContainer>
+        </Body>
+      </ThemeProvider>
     </>
   );
 }

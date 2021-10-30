@@ -4,7 +4,6 @@ import { Colours, Button, Group, FlexInputContainer, TimerContainer, ContainerCe
 import * as api from './api.js';
 import Timer from 'react-compound-timer';
 import { FormControl, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 export default function Question({ modalStatus, day, onCloseModal, onSubmitResult }) {
   const [modalIsOpen, setIsOpen] = useState(modalStatus);
@@ -19,8 +18,6 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
   useEffect(() => {
     setIsOpen(modalStatus);
   }, [modalStatus]);
-
-  const theme = createMuiTheme({ palette: { type: 'dark' } });
 
   const handleReady = (start) => {
     api
@@ -123,32 +120,30 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
               {ready && <h2 style={{ color: getColor() }}>{questionOfTheDay}</h2>}
 
               {options && (
-                <ThemeProvider theme={theme}>
-                  <Group>
-                    <FormControl component='fieldset'>
-                      <RadioGroup
-                        aria-label='gender'
-                        name='gender1'
-                        value={'value'}
-                        onChange={(e) => {
-                          setInput(e.target.value);
-                        }}
-                      >
-                        {options.map((o, i) => (
-                          <FlexInputContainer key={`FlexInputContainer${i}`}>
-                            <FormControlLabel
-                              key={`FormControlLabel${i}`}
-                              value={o}
-                              control={<Radio />}
-                              label={o}
-                              checked={o === input}
-                            />
-                          </FlexInputContainer>
-                        ))}
-                      </RadioGroup>
-                    </FormControl>
-                  </Group>
-                </ThemeProvider>
+                <Group>
+                  <FormControl component='fieldset'>
+                    <RadioGroup
+                      aria-label='gender'
+                      name='gender1'
+                      value={'value'}
+                      onChange={(e) => {
+                        setInput(e.target.value);
+                      }}
+                    >
+                      {options.map((o, i) => (
+                        <FlexInputContainer key={`FlexInputContainer${i}`}>
+                          <FormControlLabel
+                            key={`FormControlLabel${i}`}
+                            value={o}
+                            control={<Radio />}
+                            label={o}
+                            checked={o === input}
+                          />
+                        </FlexInputContainer>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </Group>
               )}
               {/* <div>
                   <Input color={getColor()} onChange={(e) => setInput(e.target.value)} value={input} />
