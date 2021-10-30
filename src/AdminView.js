@@ -3,7 +3,7 @@ import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import enGB from 'date-fns/locale/en-GB';
-import { Body, Button, Content, FlexContainer, FlexInputContainer, Group, Row } from './Styled/defaults';
+import { Button, Content, FlexInputContainer, Group, Row } from './Styled/defaults';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@material-ui/core';
 import * as api from './api.js';
 
@@ -20,19 +20,15 @@ export default function AdminView({ token }) {
   const startDate = startMoment.toDate();
 
   useEffect(() => {
-    console.log('token', token);
     if (date) {
       const day = moment(date).format('DD');
-      console.log('day', day);
       api
         .getQueryAsAdmin(day, token)
         .then((response) => {
-          console.log('response.data', response.data);
-
           setQuestion(response.data.question);
 
-          if (response.options?.length) {
-            setOptions(response.options);
+          if (response.data.options?.length) {
+            setOptions(response.data.options.map((o, index) => ({ ...o, id: index })));
           }
 
           setErrorMessage(null);
@@ -43,10 +39,17 @@ export default function AdminView({ token }) {
           }
         });
     }
-  }, [date]);
+  }, [date, token]);
+
   const handleSave = () => {
-    console.log('save');
+    api.addOrUpdateQuestion(moment(date).format('D'), question, options, token);
   };
+
+  const handleLabelChange = (event, optionId) => {
+    let newOptions = options.map((o) => ({ ...o, text: o.id === optionId ? event.target.value : o.text }));
+    setOptions(newOptions);
+  };
+
   return (
     <Content>
       <Row>
@@ -76,15 +79,26 @@ export default function AdminView({ token }) {
         {options && (
           <Group>
             <FormControl component='fieldset'>
-              <RadioGroup aria-label='gender' name='gender1' value={'value'} onChange={(e) => {}}>
+              <RadioGroup
+                aria-label='gender'
+                name='gender1'
+                value={'value'}
+                onChange={(e) => {
+                  let newOptions = options.map((o) => ({
+                    ...o,
+                    isCorrectAnswer: o.text === e.target.value ? true : false,
+                  }));
+                  setOptions(newOptions);
+                }}
+              >
                 {options.map((o, i) => (
                   <FlexInputContainer key={`FlexInputContainer${i}`}>
                     <FormControlLabel
                       key={`FormControlLabel${i}`}
-                      value={o}
+                      value={o.text}
                       control={<Radio />}
-                      label={o}
-                      // checked={}
+                      label={<TextField value={o.text} onChange={(e) => handleLabelChange(e, o.id)} />}
+                      checked={o.isCorrectAnswer}
                     />
                   </FlexInputContainer>
                 ))}

@@ -34,6 +34,21 @@ export const createUserScore = (data) => {
   );
 };
 
+export const addOrUpdateQuestion = (day, question, options, token) => {
+  const questionInputModel = {
+    day,
+    question,
+    options,
+  };
+
+  return axios.put(`${REACT_APP_ADVENT_OF_QODE_SERVER}/query`, questionInputModel, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  });
+};
+
 export const submitAnswer = (day, answer) => {
   return axios.post(
     `${REACT_APP_ADVENT_OF_QODE_SERVER}/query/answer`,
