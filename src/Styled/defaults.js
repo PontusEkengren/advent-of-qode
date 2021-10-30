@@ -61,8 +61,10 @@ export const Button = styled.button`
   cursor: pointer;
   background: transparent;
 
+  ${(props) => (props.disabled ? `` : ``)};
+
   &:hover {
-    color: ${Colours.lightGreen};
+    color: ${(props) => (props.disabled ? `${Colours.green}` : `${Colours.lightGreen}`)};
   }
 `;
 

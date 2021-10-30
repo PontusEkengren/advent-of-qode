@@ -8,7 +8,7 @@ import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@ma
 import * as api from './api.js';
 
 export default function AdminView({ token }) {
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(moment(`${moment().year()}-12-01`).toDate());
   const [question, setQuestion] = useState();
   const [options, setOptions] = useState();
   const [errorMessage, setErrorMessage] = useState();
@@ -50,6 +50,20 @@ export default function AdminView({ token }) {
     setOptions(newOptions);
   };
 
+  const lessOptions = () => {
+    if (options && options.length > 1) {
+      const newOptions = options.slice(0, options.length - 1);
+      setOptions(newOptions);
+    }
+  };
+
+  const moreOptions = () => {
+    if (options) {
+      const newOptions = [...options, { text: 'New option', id: options.length, isCorrectAnswer: false }];
+      console.log('newOptions', newOptions);
+      setOptions(newOptions);
+    }
+  };
   return (
     <Content>
       <Row>
@@ -76,6 +90,15 @@ export default function AdminView({ token }) {
         ></TextField>
       </Row>
       <Row>
+        <Button onClick={lessOptions} style={{ marginTop: 35 }}>
+          -
+        </Button>
+        <Button disabled>Options</Button>
+        <Button onClick={moreOptions} style={{ marginTop: 35 }}>
+          +
+        </Button>
+      </Row>
+      <Row>
         {options && (
           <Group>
             <FormControl component='fieldset'>
@@ -83,10 +106,10 @@ export default function AdminView({ token }) {
                 aria-label='gender'
                 name='gender1'
                 value={'value'}
-                onChange={(e) => {
+                onChange={(e, id) => {
                   let newOptions = options.map((o) => ({
                     ...o,
-                    isCorrectAnswer: o.text === e.target.value ? true : false,
+                    isCorrectAnswer: `${o.id}` === id ? true : false,
                   }));
                   setOptions(newOptions);
                 }}
@@ -95,7 +118,7 @@ export default function AdminView({ token }) {
                   <FlexInputContainer key={`FlexInputContainer${i}`}>
                     <FormControlLabel
                       key={`FormControlLabel${i}`}
-                      value={o.text}
+                      value={o.id}
                       control={<Radio />}
                       label={<TextField value={o.text} onChange={(e) => handleLabelChange(e, o.id)} />}
                       checked={o.isCorrectAnswer}
