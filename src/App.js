@@ -7,12 +7,15 @@ import Tree from './Tree.js';
 import * as api from './api.js';
 import GoogleAuth from './GoogleAuth';
 import * as storage from './storage';
+import { Route, BrowserRouter } from 'react-router-dom';
+import AdminView from './AdminView';
 const { REACT_APP_CLIENT_ID } = process.env;
 
 function App() {
   const [userScore, setUserScore] = useState([]);
   const [isLogined, setIsLogined] = storage.useLocalStorage('isLogined', false);
   const [accessToken, setAccessToken] = storage.useLocalStorage('googleId', '');
+  const [accessIdToken, setAccessIdToken] = storage.useLocalStorage('googleAccessIdToken', '');
   const [name, setName] = storage.useLocalStorage('name', '');
   const [email, setEmail] = storage.useLocalStorage('email', '');
   const [imageUrl, setImageUrl] = storage.useLocalStorage('imageUrl', undefined);
@@ -26,6 +29,7 @@ function App() {
   const login = (response) => {
     if (response.accessToken) {
       setIsLogined(true);
+      setAccessIdToken(response.tokenId); //Todo Change to tokens //https://developers.google.com/identity/sign-in/web/backend-auth
       setAccessToken(response.profileObj.email); //Todo Change to tokens //https://developers.google.com/identity/sign-in/web/backend-auth
       setName(response.profileObj.name);
       setEmail(response.profileObj.email);
@@ -79,7 +83,14 @@ function App() {
       </Header>
       <Body>
         <FlexContainer>
-          <Tree userData={userScore} disabled={!isLogined} onSubmit={handleSubmit} />
+          <BrowserRouter>
+            <Route path='/admin'>
+              <AdminView token={accessIdToken}></AdminView>
+            </Route>
+            <Route exact path='/'>
+              <Tree userData={userScore} disabled={!isLogined} onSubmit={handleSubmit} />
+            </Route>
+          </BrowserRouter>
           <ContainerCenterColumn>
             <GoogleAuth
               imageUrl={imageUrl}

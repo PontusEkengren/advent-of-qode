@@ -88,7 +88,14 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
 
   return (
     <div>
-      <Modal isOpen={modalIsOpen} ariaHideApp={false} onAfterOpen={afterOpenModal} onRequestClose={handleCloseModal} style={customStyles} contentLabel='Example Modal'>
+      <Modal
+        isOpen={modalIsOpen}
+        ariaHideApp={false}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={handleCloseModal}
+        style={customStyles}
+        contentLabel='Example Modal'
+      >
         <Timer
           startImmediately={false}
           timeToUpdate={15}
@@ -129,7 +136,13 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
                       >
                         {options.map((o, i) => (
                           <FlexInputContainer key={`FlexInputContainer${i}`}>
-                            <FormControlLabel key={`FormControlLabel${i}`} value={o} control={<Radio />} label={o} checked={o === input} />
+                            <FormControlLabel
+                              key={`FormControlLabel${i}`}
+                              value={o}
+                              control={<Radio />}
+                              label={o}
+                              checked={o === input}
+                            />
                           </FlexInputContainer>
                         ))}
                       </RadioGroup>
