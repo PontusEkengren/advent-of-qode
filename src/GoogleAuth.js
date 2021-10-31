@@ -29,6 +29,7 @@ export default function GoogleAuth({
           onFailure={onLogInFailure}
           cookiePolicy={'single_host_origin'}
           responseType='code,token'
+          isSignedIn={true}
         />
       )}
     </ContainerCenter>

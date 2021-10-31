@@ -43,12 +43,14 @@ export default function AdminView({ token, onTokenRefresh }) {
           }
         });
     }
+    // eslint-disable-next-line
   }, [date, token]);
 
   const handleSave = () => {
     api
       .addOrUpdateQuestion(moment(date).format('D'), question, options, token)
       .then(() => {
+        setErrorMessage(null);
         setSaveStatus(' ✓ ');
         setTimeout(() => {
           setSaveStatus();
@@ -59,6 +61,7 @@ export default function AdminView({ token, onTokenRefresh }) {
           setErrorMessage('Unauthorized');
           onTokenRefresh();
         }
+        if (err?.response?.data) setErrorMessage(err?.response?.data);
       });
   };
 
