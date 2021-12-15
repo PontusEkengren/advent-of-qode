@@ -49,10 +49,10 @@ export const addOrUpdateQuestion = (day, question, options, token) => {
   });
 };
 
-export const submitAnswer = (day, answer) => {
+export const submitAnswer = (day, answer, roundedTime) => {
   return axios.post(
     `${REACT_APP_ADVENT_OF_QODE_SERVER}/query/answer`,
-    { answer, day },
+    { answer, day, time: roundedTime },
     {
       headers: {
         'Content-Type': 'application/json',

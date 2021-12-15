@@ -27,4 +27,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `advent of code`
 
-This project is unashamedly and heavily inspired by [Advent of code](https://adventofcode.com/)
+This project is inspired by [Advent of code](https://adventofcode.com/)
+
+Deploy with: https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-docker-cli?tabs=azure-cli
+docker build . -t adventofqode.azurecr.io/advent-of-qode
+docker push adventofqode.azurecr.io/advent-of-qode
