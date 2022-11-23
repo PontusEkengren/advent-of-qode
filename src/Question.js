@@ -5,7 +5,7 @@ import * as api from './api.js';
 import Timer from 'react-compound-timer';
 import { FormControl, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 
-export default function Question({ modalStatus, day, onCloseModal, onSubmitResult }) {
+export default function Question({ modalStatus, day, onCloseModal, onSubmitResult, token }) {
   const [modalIsOpen, setIsOpen] = useState(modalStatus);
   const [input, setInput] = useState('');
   const [questionOfTheDay, setQuestionOfTheDay] = useState('');
@@ -15,19 +15,24 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
   const [correctAnswer, SetCorrectAnswer] = useState(false);
 
   useEffect(() => {
+    console.log('day', day);
+  }, [day]);
+
+  useEffect(() => {
     setIsOpen(modalStatus);
   }, [modalStatus]);
 
   const handleReady = (start) => {
     api
-      .getQuery(day)
+      .getQuery(day, token)
       .then((response) => {
         setQuestionOfTheDay(response.data.question);
         setOptions(response.data.options);
         setReady(true);
         start();
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log('error', e, day);
         setQuestionOfTheDay('Unable to fetch data from database');
       });
   };
@@ -51,25 +56,27 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
     if ((ready && input) || tooSlow) {
       //Sumbit answer
       api
-        .submitAnswer(day, tooSlow ? '_AlwaysWrongAnswer_' : input, roundedTime)
+        .submitAnswer(day, tooSlow ? '_AlwaysWrongAnswer_' : input, token)
         .then((response) => {
           if (response.data === 'correct') {
             stop();
             SetCorrectAnswer(true);
             setQuestionOfTheDay('You found the right answer!');
-            onSubmitResult(roundedTime);
+            // onSubmitResult(roundedTime);
           } else if (response.data === 'slow') {
             SetIncorrectAnswer(true);
             setQuestionOfTheDay(day === 24 ? `To slow` : 'To slow, try again tomorrow');
             stop();
-            onSubmitResult(-1);
+            // onSubmitResult(-1);
             setTimeout(() => SetIncorrectAnswer(false), 2200);
+            setTimeout(() => window.location.reload(false), 2200);
           } else {
             SetIncorrectAnswer(true);
             setQuestionOfTheDay(day === 24 ? `Wrong answer i'm afraid` : 'Try again tomorrow');
             stop();
-            onSubmitResult(-1);
+            // onSubmitResult(-1);
             setTimeout(() => SetIncorrectAnswer(false), 2200);
+            setTimeout(() => window.location.reload(false), 2200);
           }
         })
         .catch((e) => {
@@ -122,9 +129,14 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
                   <Timer.Seconds />
                 </TimerContainer>
               </div>
-              {!ready && day === 1 && <h2 style={{ color: getColor() }}>You can only guess/submit one time</h2>}
+              {!ready && day === 1 && (
+                <h2 style={{ color: getColor(), textAlign: 'center' }}>
+                  You can only guess/submit one time <br /> New rules for this year. No time-limit.
+                  <br /> However the faster you answer, the higher you score!
+                </h2>
+              )}
               {!ready && day !== 1 && (
-                <h2 style={{ color: getColor() }}>You only have 10 seconds to answer the question</h2>
+                <h2 style={{ color: getColor() }}>The faster you answer, the higher you score!</h2>
               )}
               {!ready && <Button onClick={() => handleReady(start)}>Ready</Button>}
               {ready && <h2 style={{ color: getColor() }}>{questionOfTheDay}</h2>}

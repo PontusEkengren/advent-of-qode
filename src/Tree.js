@@ -5,8 +5,9 @@ import { treeData } from './treeData.js';
 import Question from './Question';
 const { REACT_APP_ACTIVE_MONTH } = process.env;
 
-export default function Tree({ userData, disabled, onSubmit }) {
+export default function Tree({ userData, disabled, onSubmit, token }) {
   const [showQuestion, setShowQuestion] = useState(false);
+  const [queryDay, setQueryDay] = useState(null);
   const [tree, setTree] = useState([]);
   const date = new Date().toISOString();
   let dayString = date.slice(8, 10);
@@ -15,14 +16,16 @@ export default function Tree({ userData, disabled, onSubmit }) {
   // today = 1; //For debug purpose
 
   const getTreeData = useCallback((userData) => {
+    console.log(userData);
     const date = new Date().toISOString();
     let month = date.slice(5, 7);
     if (month === REACT_APP_ACTIVE_MONTH ? `${REACT_APP_ACTIVE_MONTH}` : '12') {
       return treeData.map((branch) => {
+        console.log('branch', branch);
         return {
           ...branch,
           active: branch.day <= parseInt(date.slice(8, 10)),
-          clickable: !userData.find((u) => u.question === branch.day && u.score === '-1'),
+          clickable: !userData.find((u) => u.question === branch.day && u.score === '0'),
           completed: userData.some((x) => x.question === branch.day),
         };
       });
@@ -38,16 +41,17 @@ export default function Tree({ userData, disabled, onSubmit }) {
   const isActive = (branch) => {
     if (disabled) return false;
 
-    return branch.active && branch.day === today;
+    return branch.active && branch.day <= today && branch.day > 0;
   };
 
   const getBranchContent = (branch) => {
     return (
       <Row
         active={isActive(branch) && branch.clickable && !branch.completed}
-        onClick={() => {
+        onClick={(e) => {
           if (isActive(branch) && branch.clickable && !branch.completed) {
             setShowQuestion(true);
+            setQueryDay(branch.day);
           }
         }}
       >
@@ -95,12 +99,14 @@ export default function Tree({ userData, disabled, onSubmit }) {
   };
 
   const handleSubmit = (time) => {
-    onSubmit(time, today);
+    onSubmit(time, queryDay, token);
   };
 
   return (
     <div style={{ width: '950px', margin: '20px 0 0 40px', minWidth: '930px' }}>
-      {tree.length > 0 && todaysBranch && !todaysBranch.clickable && todaysBranch.completed && today !== 24 && <div style={{ color: Colours.lightGrey }}>Come back tomorrow for a new challange!</div>}
+      {tree.length > 0 && todaysBranch && !todaysBranch.clickable && todaysBranch.completed && today !== 24 && (
+        <div style={{ color: Colours.lightGrey }}>Come back tomorrow for a new challange!</div>
+      )}
       {tree.length > 0 &&
         tree.map((branch, i) => (
           <Branch active={branch.active} key={i}>
@@ -110,7 +116,13 @@ export default function Tree({ userData, disabled, onSubmit }) {
           </Branch>
         ))}
 
-      <Question onCloseModal={handleCloseModal} modalStatus={showQuestion} day={today} onSubmitResult={handleSubmit} />
+      <Question
+        onCloseModal={handleCloseModal}
+        modalStatus={showQuestion}
+        day={queryDay}
+        onSubmitResult={handleSubmit}
+        token={token}
+      />
     </div>
   );
 }

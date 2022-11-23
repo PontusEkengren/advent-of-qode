@@ -39,7 +39,6 @@ export default function AdminView({ token, onTokenRefresh }) {
         .catch((err) => {
           if (err?.response?.status === 401) {
             setErrorMessage('Unauthorized');
-            onTokenRefresh();
           }
         });
     }
@@ -112,44 +111,48 @@ export default function AdminView({ token, onTokenRefresh }) {
         ></TextField>
       </Row>
       <Row>
-        <Button onClick={lessOptions} style={{ marginTop: 35 }}>
-          -
-        </Button>
-        <Button disabled>Options</Button>
-        <Button onClick={moreOptions} style={{ marginTop: 35 }}>
-          +
-        </Button>
+        <>
+          <Button onClick={lessOptions} style={{ marginTop: 35 }}>
+            -
+          </Button>
+          <Button disabled>Options</Button>
+          <Button onClick={moreOptions} style={{ marginTop: 35 }}>
+            +
+          </Button>
+        </>
       </Row>
       <Row>
         {options && (
-          <Group>
-            <FormControl component='fieldset'>
-              <RadioGroup
-                aria-label='gender'
-                name='gender1'
-                value={'value'}
-                onChange={(e, id) => {
-                  let newOptions = options.map((o) => ({
-                    ...o,
-                    isCorrectAnswer: `${o.id}` === id ? true : false,
-                  }));
-                  setOptions(newOptions);
-                }}
-              >
-                {options.map((o, i) => (
-                  <FlexInputContainer key={`FlexInputContainer${i}`}>
-                    <FormControlLabel
-                      key={`FormControlLabel${i}`}
-                      value={o.id}
-                      control={<Radio />}
-                      label={<TextField value={o.text} onChange={(e) => handleLabelChange(e, o.id)} />}
-                      checked={o.isCorrectAnswer}
-                    />
-                  </FlexInputContainer>
-                ))}
-              </RadioGroup>
-            </FormControl>
-          </Group>
+          <>
+            <Group>
+              <FormControl component='fieldset'>
+                <RadioGroup
+                  aria-label='gender'
+                  name='gender1'
+                  value={'value'}
+                  onChange={(e, id) => {
+                    let newOptions = options.map((o) => ({
+                      ...o,
+                      isCorrectAnswer: `${o.id}` === id ? true : false,
+                    }));
+                    setOptions(newOptions);
+                  }}
+                >
+                  {options.map((o, i) => (
+                    <FlexInputContainer key={`FlexInputContainer${i}`}>
+                      <FormControlLabel
+                        key={`FormControlLabel${i}`}
+                        value={o.id}
+                        control={<Radio />}
+                        label={<TextField value={o.text} onChange={(e) => handleLabelChange(e, o.id)} />}
+                        checked={o.isCorrectAnswer}
+                      />
+                    </FlexInputContainer>
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </Group>
+          </>
         )}
       </Row>
       <Row>

@@ -55,7 +55,7 @@ function App() {
     console.log('Failed to log out', response);
   };
 
-  const handleSubmit = (time, day) => {
+  const handleSubmit = (time, day, token) => {
     const data = {
       userId: accessToken,
       score: time,
@@ -98,7 +98,7 @@ function App() {
                 <AdminView token={accessIdToken} onTokenRefresh={refreshAccess}></AdminView>
               </Route>
               <Route exact path='/'>
-                <Tree userData={userScore} disabled={!isLogined} onSubmit={handleSubmit} />
+                <Tree userData={userScore} disabled={!isLogined} onSubmit={handleSubmit} token={accessIdToken} />
               </Route>
             </BrowserRouter>
             <ContainerCenterColumn>

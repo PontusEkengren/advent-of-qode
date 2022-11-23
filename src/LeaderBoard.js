@@ -28,7 +28,7 @@ export default function LeaderBoard() {
           <tr>
             <th></th>
             <RightHeader>Days</RightHeader>
-            <RightHeader>Seconds</RightHeader>
+            <RightHeader>Score</RightHeader>
           </tr>
           {leaderBoard &&
             leaderBoard.map((user, i) => (
