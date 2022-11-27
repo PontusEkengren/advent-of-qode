@@ -1,7 +1,3 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## This Readme is currently work in progress
-
 ### `Prerequisite`
 
 **Create an .env file** in this folder and enter your google api-client id<br>
@@ -30,5 +26,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 This project is inspired by [Advent of code](https://adventofcode.com/)
 
 Deploy with: https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-docker-cli?tabs=azure-cli
+
+az login
+docker login myregistry.azurecr.io
 docker build . -t adventofqode.azurecr.io/advent-of-qode
 docker push adventofqode.azurecr.io/advent-of-qode

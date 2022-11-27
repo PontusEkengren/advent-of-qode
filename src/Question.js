@@ -18,10 +18,6 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
   const initialTime = 15;
 
   useEffect(() => {
-    console.log('day', day);
-  }, [day]);
-
-  useEffect(() => {
     setIsOpen(modalStatus);
   }, [modalStatus]);
 
@@ -123,7 +119,6 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
                     <Timer.Seconds />
                     <Timer.Milliseconds
                       formatValue={(value) => {
-                        console.log('getTime', getTime());
                         return `${Calculate(getTime(), initialTime)} score `;
                       }}
                     />

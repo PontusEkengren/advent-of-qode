@@ -16,7 +16,6 @@ export default function Tree({ userData, disabled, onSubmit, email }) {
   // today = 1; //For debug purpose
 
   const getTreeData = useCallback((userData) => {
-    console.log(userData);
     const date = new Date().toISOString();
     let month = date.slice(5, 7);
     if (month === REACT_APP_ACTIVE_MONTH ? `${REACT_APP_ACTIVE_MONTH}` : '12') {

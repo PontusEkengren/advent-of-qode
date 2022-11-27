@@ -15,7 +15,6 @@ const { REACT_APP_CLIENT_ID } = process.env;
 
 function App() {
   const [userScore, setUserScore] = useState([]);
-  const [profileObj, setProfileObj] = useState();
   const [isLogined, setIsLogined] = storage.useLocalStorage('isLogined', false);
   const [accessToken, setAccessToken] = storage.useLocalStorage('googleId', '');
   const [accessIdToken, setAccessIdToken] = storage.useLocalStorage('accessIdToken', undefined);
@@ -29,13 +28,8 @@ function App() {
     });
   }, [email]);
 
-  useEffect(() => {
-    console.log('profileObj', profileObj);
-  }, [profileObj]);
-
   const login = (response) => {
     if (response.accessToken) {
-      setProfileObj(response.profileObj);
       setIsLogined(true);
       setAccessIdToken(response.tokenId);
       setAccessToken(response.profileObj.email); //Todo Change to tokens //https://developers.google.com/identity/sign-in/web/backend-auth

@@ -18,7 +18,6 @@ export const getQuery = (day, email) => {
 };
 
 export const createUserScore = (data) => {
-  console.log('data', data);
   return axios.post(
     `${REACT_APP_ADVENT_OF_QODE_SERVER}/advent`,
     {
