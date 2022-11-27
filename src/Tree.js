@@ -21,7 +21,6 @@ export default function Tree({ userData, disabled, onSubmit, token }) {
     let month = date.slice(5, 7);
     if (month === REACT_APP_ACTIVE_MONTH ? `${REACT_APP_ACTIVE_MONTH}` : '12') {
       return treeData.map((branch) => {
-        console.log('branch', branch);
         return {
           ...branch,
           active: branch.day <= parseInt(date.slice(8, 10)),

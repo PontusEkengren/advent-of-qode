@@ -4,6 +4,8 @@ import { Colours, Button, Group, FlexInputContainer, TimerContainer, ContainerCe
 import * as api from './api.js';
 import Timer from 'react-compound-timer';
 import { FormControl, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import { FlexContainer } from './Styled/defaults';
+import { Calculate } from './scoreCalculator';
 
 export default function Question({ modalStatus, day, onCloseModal, onSubmitResult, token }) {
   const [modalIsOpen, setIsOpen] = useState(modalStatus);
@@ -13,6 +15,7 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
   const [ready, setReady] = useState('');
   const [incorrectAnswer, SetIncorrectAnswer] = useState('');
   const [correctAnswer, SetCorrectAnswer] = useState(false);
+  const initialTime = 15;
 
   useEffect(() => {
     console.log('day', day);
@@ -51,10 +54,7 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
   };
 
   const handleSubmit = (stop, getTime, tooSlow) => {
-    console.log('get time', getTime());
-    const roundedTime = Math.round(Math.floor(getTime()) / 1000);
     if ((ready && input) || tooSlow) {
-      //Sumbit answer
       api
         .submitAnswer(day, tooSlow ? '_AlwaysWrongAnswer_' : input, token)
         .then((response) => {
@@ -62,22 +62,18 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
             stop();
             SetCorrectAnswer(true);
             setQuestionOfTheDay('You found the right answer!');
-            // onSubmitResult(roundedTime);
           } else if (response.data === 'slow') {
             SetIncorrectAnswer(true);
             setQuestionOfTheDay(day === 24 ? `To slow` : 'To slow, try again tomorrow');
             stop();
-            // onSubmitResult(-1);
             setTimeout(() => SetIncorrectAnswer(false), 2200);
-            setTimeout(() => window.location.reload(false), 2200);
           } else {
             SetIncorrectAnswer(true);
-            setQuestionOfTheDay(day === 24 ? `Wrong answer i'm afraid` : 'Try again tomorrow');
+            setQuestionOfTheDay(day === 24 ? `Wrong answer i'm afraid` : 'Better luck next time');
             stop();
-            // onSubmitResult(-1);
             setTimeout(() => SetIncorrectAnswer(false), 2200);
-            setTimeout(() => window.location.reload(false), 2200);
           }
+          setTimeout(() => window.location.reload(false), 2200);
         })
         .catch((e) => {
           console.log('Error', e);
@@ -107,28 +103,33 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
       >
         <Timer
           startImmediately={false}
-          timeToUpdate={15}
-          checkpoints={[
-            {
-              time: 11000,
-              callback: () => {
-                handleSubmit(
-                  () => {},
-                  () => 11000,
-                  true
-                );
-              },
-            },
-          ]}
+          direction='backward'
+          initialTime={15 * 1000}
+          timeToUpdate={25}
+          formatValue={(value, e) => {
+            return `${value < 10 ? `0${value}` : value}s `;
+          }}
         >
           {({ start, stop, getTime }) => (
             <ContainerCenterColumn>
-              <div>
+              <FlexContainer>
                 <TimerContainer>
-                  <Timer.Minutes />:
-                  <Timer.Seconds />
+                  <div
+                    style={{
+                      background: Colours.background,
+                      color: Colours.lightGrey,
+                    }}
+                  >
+                    <Timer.Seconds />
+                    <Timer.Milliseconds
+                      formatValue={(value) => {
+                        console.log('getTime', getTime());
+                        return `${Calculate(getTime(), initialTime)} score `;
+                      }}
+                    />
+                  </div>
                 </TimerContainer>
-              </div>
+              </FlexContainer>
               {!ready && day === 1 && (
                 <h2 style={{ color: getColor(), textAlign: 'center' }}>
                   You can only guess/submit one time <br /> New rules for this year. No time-limit.
