@@ -5,7 +5,7 @@ import { treeData } from './treeData.js';
 import Question from './Question';
 const { REACT_APP_ACTIVE_MONTH } = process.env;
 
-export default function Tree({ userData, disabled, onSubmit, token }) {
+export default function Tree({ userData, disabled, onSubmit, email }) {
   const [showQuestion, setShowQuestion] = useState(false);
   const [queryDay, setQueryDay] = useState(null);
   const [tree, setTree] = useState([]);
@@ -98,7 +98,7 @@ export default function Tree({ userData, disabled, onSubmit, token }) {
   };
 
   const handleSubmit = (time) => {
-    onSubmit(time, queryDay, token);
+    onSubmit(time, queryDay, email);
   };
 
   return (
@@ -120,7 +120,7 @@ export default function Tree({ userData, disabled, onSubmit, token }) {
         modalStatus={showQuestion}
         day={queryDay}
         onSubmitResult={handleSubmit}
-        token={token}
+        email={email}
       />
     </div>
   );

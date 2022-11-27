@@ -104,7 +104,7 @@ function App() {
                 <AdminView token={accessIdToken} onTokenRefresh={refreshAccess}></AdminView>
               </Route>
               <Route exact path='/'>
-                <Tree userData={userScore} disabled={!isLogined} onSubmit={handleSubmit} token={accessIdToken} />
+                <Tree userData={userScore} disabled={!isLogined} onSubmit={handleSubmit} email={email} />
               </Route>
             </BrowserRouter>
             <ContainerCenterColumn>

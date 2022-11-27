@@ -5,7 +5,7 @@ export const Calculate = (time, initialTime) => {
   console.log('initialTime', initialTime);
   console.log('time', time);
   var timeScore = (initialTime * 1000 - time) * scoreReducingConstant;
-  var scoreToReduce = Math.floor(timeScore);
+  var scoreToReduce = Math.floor(timeScore / 1000);
   const maxScore = 206;
   console.log('scoreToReduce', scoreToReduce);
   const returnScore = maxScore - scoreToReduce;

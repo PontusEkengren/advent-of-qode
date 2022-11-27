@@ -7,7 +7,7 @@ import { FormControl, RadioGroup, FormControlLabel, Radio } from '@material-ui/c
 import { FlexContainer } from './Styled/defaults';
 import { Calculate } from './scoreCalculator';
 
-export default function Question({ modalStatus, day, onCloseModal, onSubmitResult, token }) {
+export default function Question({ modalStatus, day, onCloseModal, onSubmitResult, email }) {
   const [modalIsOpen, setIsOpen] = useState(modalStatus);
   const [input, setInput] = useState('');
   const [questionOfTheDay, setQuestionOfTheDay] = useState('');
@@ -27,7 +27,7 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
 
   const handleReady = (start) => {
     api
-      .getQuery(day, token)
+      .getQuery(day, email)
       .then((response) => {
         setQuestionOfTheDay(response.data.question);
         setOptions(response.data.options);
@@ -56,7 +56,7 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
   const handleSubmit = (stop, getTime, tooSlow) => {
     if ((ready && input) || tooSlow) {
       api
-        .submitAnswer(day, tooSlow ? '_AlwaysWrongAnswer_' : input, token)
+        .submitAnswer(day, tooSlow ? '_AlwaysWrongAnswer_' : input, email)
         .then((response) => {
           if (response.data === 'correct') {
             stop();

@@ -13,8 +13,8 @@ export const getQueryAsAdmin = (day, token) => {
   return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/admin?day=${day}`, { headers: { Authorization: token } });
 };
 
-export const getQuery = (day, token) => {
-  return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/query?day=${day}`, { headers: { Authorization: token } });
+export const getQuery = (day, email) => {
+  return axios.get(`${REACT_APP_ADVENT_OF_QODE_SERVER}/query?day=${day}&email=${email}`);
 };
 
 export const createUserScore = (data) => {
@@ -51,15 +51,6 @@ export const addOrUpdateQuestion = (day, question, options, token) => {
   });
 };
 
-export const submitAnswer = (day, answer, token) => {
-  return axios.post(
-    `${REACT_APP_ADVENT_OF_QODE_SERVER}/query/answer`,
-    { answer, day },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token,
-      },
-    }
-  );
+export const submitAnswer = (day, answer, email) => {
+  return axios.post(`${REACT_APP_ADVENT_OF_QODE_SERVER}/query/answer?email=${email}`, { answer, day });
 };
