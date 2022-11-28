@@ -18,18 +18,15 @@ export default function Tree({ userData, disabled, onSubmit, email }) {
   const getTreeData = useCallback((userData) => {
     const date = new Date().toISOString();
     let month = date.slice(5, 7);
-    if (month === REACT_APP_ACTIVE_MONTH ? `${REACT_APP_ACTIVE_MONTH}` : '12') {
-      return treeData.map((branch) => {
-        return {
-          ...branch,
-          active: branch.day <= parseInt(date.slice(8, 10)),
-          clickable: !userData.find((u) => u.question === branch.day && u.score === '0'),
-          completed: userData.some((x) => x.question === branch.day),
-        };
-      });
-    }
-
-    return treeData;
+    const cristMooseTime = `${REACT_APP_ACTIVE_MONTH}` === `${month}`;
+    return treeData.map((branch) => {
+      return {
+        ...branch,
+        active: branch.day <= parseInt(date.slice(8, 10)) && cristMooseTime,
+        clickable: !userData.find((u) => u.question === branch.day && u.score === '0'),
+        completed: userData.some((x) => x.question === branch.day),
+      };
+    });
   }, []);
 
   useEffect(() => {
