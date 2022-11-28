@@ -28,6 +28,6 @@ This project is inspired by [Advent of code](https://adventofcode.com/)
 Deploy with: https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-docker-cli?tabs=azure-cli
 
 az login
-docker login myregistry.azurecr.io
+docker login adventofqode.azurecr.io
 docker build . -t adventofqode.azurecr.io/advent-of-qode
 docker push adventofqode.azurecr.io/advent-of-qode

@@ -108,26 +108,17 @@ export default function Question({ modalStatus, day, onCloseModal, onSubmitResul
         >
           {({ start, stop, getTime }) => (
             <ContainerCenterColumn>
-              <FlexContainer>
-                <TimerContainer>
-                  <div
-                    style={{
-                      background: Colours.background,
-                      color: Colours.lightGrey,
-                    }}
-                  >
-                    <Timer.Seconds />
-                    <Timer.Milliseconds
-                      formatValue={(value) => {
-                        return `${Calculate(getTime(), initialTime)} score `;
-                      }}
-                    />
-                  </div>
-                </TimerContainer>
-              </FlexContainer>
+              <TimerContainer>
+                <Timer.Seconds />
+                <Timer.Milliseconds
+                  formatValue={(value) => {
+                    return `approximate score ${Calculate(getTime(), initialTime)}`;
+                  }}
+                />
+              </TimerContainer>
               {!ready && day === 1 && (
                 <h2 style={{ color: getColor(), textAlign: 'center' }}>
-                  You can only guess/submit one time <br /> New rules for this year. No time-limit.
+                  New rules for this year. No time-limit.
                   <br /> However the faster you answer, the higher you score!
                 </h2>
               )}
