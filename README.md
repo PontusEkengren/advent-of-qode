@@ -31,3 +31,10 @@ az login
 docker login adventofqode.azurecr.io
 docker build . -t adventofqode.azurecr.io/advent-of-qode
 docker push adventofqode.azurecr.io/advent-of-qode
+
+
+pg_dump for local testing with "real" questions dont mix them up 
+
+pg_dump -h adventofqode.postgres.database.azure.com -U advent@adventofqode -d adventofqode -Fc --file "c:/temp/adventofqode_2022.backup"
+
+pg_restore -h localhost -U postgres --clean -d adventofqode "c:/temp/adventofqode_2022.backup"
